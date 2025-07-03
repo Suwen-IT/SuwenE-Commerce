@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Domain.Identity;
+using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,6 +24,7 @@ namespace Persistence.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<Notification>Notifications { get; set; }
         public DbSet<Basket > Baskets { get; set; } 
         public DbSet<BasketItem> BasketItems { get; set; }
 

@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Persistence\Suwen.Persistence.csproj" />
+    <ProjectReference Include="..\Suwen.Infrastructure\Suwen.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

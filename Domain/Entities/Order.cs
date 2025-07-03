@@ -1,5 +1,5 @@
-﻿using Domain.Base;
-using Domain.Identity;
+﻿using Domain.Entities.Base;
+using Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
