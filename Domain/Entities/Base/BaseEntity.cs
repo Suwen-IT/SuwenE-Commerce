@@ -10,11 +10,9 @@ namespace Domain.Entities.Base
 {
     public abstract class BaseEntity:IBaseEntity
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public DateTime? CreatedTime { get; set; }=DateTime.UtcNow;
-        public DateTime? UpdatedTime {  get; set; }
-
+        public int Id { get; set; } 
+        public DateTime CreatedTime { get; set; }=DateTime.UtcNow;
+    
         public bool IsDeleted { get; set; }=false; 
     }
 }
