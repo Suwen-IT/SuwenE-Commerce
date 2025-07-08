@@ -16,15 +16,7 @@ namespace Application.Mappers
             // Entity -> DTO
             CreateMap<Order, OrderDto>()
                 .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email));
-
-            CreateMap<OrderDetail, OrderDetailDto>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-
-            // DTO -> Entity (Sipariş oluştururken)
-            CreateMap<OrderCreateDto, Order>()
-                .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(_ => DateTime.UtcNow));
-
-            CreateMap<OrderDetailCreateDto, OrderDetail>();
+;
         }
 
     }

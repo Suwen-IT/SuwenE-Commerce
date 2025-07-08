@@ -1,21 +1,18 @@
-﻿using Domain.Entities.Base;
-using Domain.Entities.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.Features.DTOs.Addresses
 {
-    public class Address: BaseEntity
+    public class AddressDto
     {
-        public Guid UserId { get; set; }
-        public AppUser User { get; set; }
-
+        public int Id { get; set; }
         public string Title { get; set; }
         public string FullAddress { get; set; }
         public string City { get; set; }
         public string ZipCode { get; set; }
+        public Guid UserId { get; set; }
     }
 }

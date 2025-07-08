@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\DTOs\Users\" />
+    <Folder Include="Features\Categories\Commands\" />
+    <Folder Include="Features\Categories\Handlers\" />
+    <Folder Include="Features\Categories\Queries\" />
   </ItemGroup>
 
 </Project>

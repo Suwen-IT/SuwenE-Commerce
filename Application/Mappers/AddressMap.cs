@@ -14,8 +14,6 @@ namespace Application.Mappers
         public AddressMap() 
         {
             CreateMap<Address, AddressDto>();
-            CreateMap<AddressCreateDto, Address>();
-            CreateMap<AddressUpdateDto, Address>();
         }
 
     }

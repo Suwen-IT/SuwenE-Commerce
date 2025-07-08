@@ -14,7 +14,6 @@ namespace Application.Mappers
         public NotificationMap()
         {
             CreateMap<Notification, NotificationDto>();
-            CreateMap<NotificationCreateDto, Notification>();
         }
     }
 }

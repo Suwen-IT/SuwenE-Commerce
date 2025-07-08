@@ -14,12 +14,9 @@ namespace Application.Mappers
         public BasketMap()
         {
             CreateMap<Basket, BasketDto>();
-            CreateMap<BasketCreateDto, Basket>();
-
             CreateMap<BasketItem, BasketItemDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-
-            CreateMap<BasketItemCreateDto, BasketItem>();
+            
         }
     }
 }

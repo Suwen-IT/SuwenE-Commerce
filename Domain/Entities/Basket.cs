@@ -13,6 +13,6 @@ namespace Domain.Entities
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
         
-        public ICollection<BasketItem>BasketItems { get; set; }
+        public ICollection<BasketItem>BasketItems { get; set; }=new List<BasketItem>();
     }
 }

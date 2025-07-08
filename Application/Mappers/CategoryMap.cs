@@ -14,8 +14,6 @@ namespace Application.Mappers
         public CategoryMap()
         {
             CreateMap<Category, CategoryDto>();
-            CreateMap<CategoryCreateDto, Category>();
-            CreateMap<CategoryUpdateDto, Category>();
         }
     }
 }

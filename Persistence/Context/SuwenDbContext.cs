@@ -21,7 +21,6 @@ namespace Persistence.Context
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Detail> Details { get; set; }  
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Address> Addresses { get; set; }

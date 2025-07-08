@@ -17,11 +17,11 @@ namespace Suwen.Persistence.Repositories
         }
 
         private DbSet<T> Table { get => dbContext.Set<T>(); }
-        public async Task AddAsync(T entity)
+        public async Task<bool> AddAsync(T entity)
         {
-            await Table.AddAsync(entity);
+            await dbContext.Set<T>().AddAsync(entity);
+            return true;
         }
-
         public async Task AddRangeAsync(IList<T> entities)
         {
             await Table.AddRangeAsync(entities);
@@ -32,6 +32,10 @@ namespace Suwen.Persistence.Repositories
            await Task.Run(() => Table.Remove(entity));
         }
 
+        public async Task<bool> SaveChanges()
+        {
+            return await dbContext.SaveChangesAsync()>0;
+        }
         public async Task<T> UpdateAsync(T entity)
         {
             await Task.Run(() => Table.Update(entity));
