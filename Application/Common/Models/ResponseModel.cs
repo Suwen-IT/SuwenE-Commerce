@@ -1,3 +1,5 @@
+using Domain.Entities;
+
 namespace Application.Common.Models;
 
 public class ResponseModel<T>
@@ -14,7 +16,7 @@ public class ResponseModel<T>
     {
         Success = true;
         Data = data;
-        Messages = null;
+        Messages =null;
         StatusCode = statusCode;
     }
 
@@ -33,4 +35,6 @@ public class ResponseModel<T>
         Messages = new[] { message };
         StatusCode = statusCode;
     }
+
+
 }

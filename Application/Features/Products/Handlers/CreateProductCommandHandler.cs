@@ -1,6 +1,8 @@
 using Application.Common.Models;
+using Application.Features.DTOs.Products;
 using Application.Features.Products.Commands;
 using Application.Interfaces.Repositories;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
@@ -9,30 +11,26 @@ namespace Application.Features.Products.Handlers;
 public class CreateProductCommandHandler:IRequestHandler<CreateProductCommandRequest,ResponseModel<int>>
 {
     private readonly IWriteRepository<Product> _repository;
+    private readonly IMapper _mapper;
 
-    public CreateProductCommandHandler(IWriteRepository<Product> repository)
+    public CreateProductCommandHandler(IWriteRepository<Product> repository,IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
     
     public async Task<ResponseModel<int>> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var product = new Product
-        {
-            Name = request.Name,
-            Description = request.Description,
-            Price = request.Price,
-            ImageUrl = request.ImageUrl,
-            CategoryId = request.CategoryId,
-
-        };
+        var product = _mapper.Map<Product>(request);
+   
         var addResult = await _repository.AddAsync(product);
         
         if(!addResult)
-            return new ResponseModel<int>("Product could not be created",404);
+            return new ResponseModel<int>("Product could not be created",400);
 
-        await _repository.SaveChanges();
-        return new ResponseModel<int>("Product created successfully",200);
+        await _repository.SaveChangesAsync();
+        var productDto = _mapper.Map<ProductDto>(product);
+        return new ResponseModel<int>(product.Id,200);
 
     }
 }

@@ -12,6 +12,6 @@ namespace Application.Interfaces.Repositories
         Task AddRangeAsync(IList<T> entities);
         Task<T> UpdateAsync(T entity);
         Task DeleteAsync(T entity);
-        Task<bool>SaveChanges();
+        Task<bool>SaveChangesAsync();
     }
 }

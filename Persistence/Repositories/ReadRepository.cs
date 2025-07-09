@@ -1,7 +1,8 @@
 ﻿using Application.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,13 @@ namespace Suwen.Infrastructure.Repositories
 {
     public class ReadRepository<T> : IReadRepository<T> where T : class
     {
-        private readonly DbContext dbContext;
-        public ReadRepository(DbContext dbContext)
+        private readonly SuwenDbContext _dbContext;
+        public ReadRepository(SuwenDbContext dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
-        private DbSet<T> Table { get => dbContext.Set<T>(); }
+        private DbSet<T> Table { get => _dbContext.Set<T>(); }
 
         public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
         {
@@ -65,6 +66,28 @@ namespace Suwen.Infrastructure.Repositories
             return await queryable.FirstOrDefaultAsync(predicate);
         }
 
-     
+        public async Task<T> GetByIdAsync(int id, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            return await Table.FindAsync(id);
+        }
+
+        public async Task<List<Product>> GetAllWithCategoryAsync()
+        {
+            return await _dbContext.Products
+                                 .Include(p => p.Category)
+                                 .ToListAsync();
+        }
+
+        public async Task<Product> GetByIdWithCategoryAsync(int id)
+        {
+            return await _dbContext.Products
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }

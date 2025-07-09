@@ -1,11 +1,15 @@
 ﻿using Application;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.UnitOfWorks;
+using Application.Mappers;
 using Application.Services;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Persistence.Context;
+using Suwen.Infrastructure.Repositories;
+using Suwen.Persistence.Repositories;
 using Suwen.Persistence.UnitOfWorks;
 using System.Text;
 
@@ -18,7 +22,7 @@ builder.Services.AddDbContext<SuwenDbContext>(options =>
 });
 
 // 2. Application Katmanı Servisleri (MediatR + AutoMapper)
-builder.Services.AddApplicationServices(); // ← Bu satırı ekleyin
+builder.Services.AddApplicationServices(); 
 
 // 3. JWT Ayarları
 var jwtSettings = builder.Configuration.GetSection("JwtOptions");
@@ -39,8 +43,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // 4. Diğer Servisler
+builder.Services.AddAutoMapper(typeof(ProductMap).Assembly);
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
+builder.Services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

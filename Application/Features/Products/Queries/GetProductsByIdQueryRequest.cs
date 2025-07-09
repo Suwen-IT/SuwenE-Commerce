@@ -8,8 +8,4 @@ public class GetProductsByIdQueryRequest:IRequest<ResponseModel<ProductDto>>
 {
     public int Id { get; set; }
 
-    public GetProductsByIdQueryRequest(int id)
-    {
-        Id = id;
-    }
 }
