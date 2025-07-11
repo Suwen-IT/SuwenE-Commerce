@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.UnitOfWorks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,10 +16,12 @@ namespace Suwen.Persistence
 {
     public static class DependencyInjection
     {
-        public static  IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+        public static  IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
+
             services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
             services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
+           
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }

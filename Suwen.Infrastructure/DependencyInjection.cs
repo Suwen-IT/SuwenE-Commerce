@@ -1,18 +1,51 @@
-﻿using Application.Services;
+﻿using Application.Features.CQRS.Users.Handlers;
+using Application.Interfaces;
+using Application.Services;
 using Domain.Constants;
+using Domain.Entities.Identity;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Persistence.Context;
+using Suwen.Infrastructure.Abstracts;
+using System;
+using System.Reflection;
 using System.Text;
 
 namespace Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructureService(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDbContext<SuwenDbContext>(options=>
+        {             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        });
+
+        services.AddIdentity<AppUser, AppRole>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+            options.User.AllowedUserNameCharacters = null;
+
+            options.SignIn.RequireConfirmedAccount = false;
+            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedPhoneNumber = false;
+
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 3;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        })
+           .AddEntityFrameworkStores<SuwenDbContext>()
+           .AddDefaultTokenProviders();
+        
+
+
         // 1. JWT Ayarlarını Yükle (appsettings.json'dan)
         var jwtOptions = configuration.GetSection("JwtOptions").Get<JwtOptions>();
         services.AddSingleton(jwtOptions); // Singleton olarak kaydet
@@ -37,30 +70,12 @@ public static class DependencyInjection
                 ClockSkew = TimeSpan.Zero // Token süresini tam olarak uygula
             };
 
-            // 3. SignalR/WebSocket desteği (isteğe bağlı)
-            options.Events = new JwtBearerEvents
-            {
-                OnMessageReceived = context =>
-                {
-                    var accessToken = context.Request.Query["access_token"];
-                    if (!string.IsNullOrEmpty(accessToken))
-                    {
-                        context.Token = accessToken;
-                    }
-                    return Task.CompletedTask;
-                }
-            };
+            
         });
-
+       
         // 4. Token Servisini Ekleyin
         services.AddScoped<ITokenService, TokenService>();
-
-        // 5. Authorization Politikaları (isteğe bağlı)
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("AdminOnly", policy =>
-                policy.RequireClaim("isAdmin", "true"));
-        });
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

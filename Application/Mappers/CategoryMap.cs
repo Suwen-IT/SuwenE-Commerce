@@ -1,4 +1,5 @@
-﻿using Application.Features.DTOs.Categories;
+﻿using Application.Features.CQRS.Categories.Commands;
+using Application.Features.DTOs.Categories;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -14,6 +15,11 @@ namespace Application.Mappers
         public CategoryMap()
         {
             CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
+
+            CreateMap<UpdateCategoryCommandRequest, Category>();
+
+            CreateMap<CreateCategoyCommandRequest, Category>();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Application.Interfaces.Repositories
         IQueryable<T> Find(Expression<Func<T, bool>> predicate, bool enableTracking = false);
 
         Task<T> GetByIdAsync(int id, bool tracking = true);
+        Task<T> GetByIdAsync(Guid id, bool tracking = true);
 
         Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null);
     }

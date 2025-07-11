@@ -24,14 +24,16 @@ namespace Suwen.Infrastructure.Repositories
 
         public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
         {
-            Table.AsNoTracking();
+            var query = Table.AsQueryable();
             if (predicate != null) Table.Where(predicate);
             return await Table.CountAsync();
         }
         public IQueryable<T> Find(Expression<Func<T, bool>> predicate, bool enableTracking = false)
         {
-            if (!enableTracking) Table.AsNoTracking();
-                    return Table.Where(predicate);
+            IQueryable<T> query = Table;
+            if (!enableTracking)
+                query = query.AsNoTracking();
+            return query.Where(predicate);
         }
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>,IIncludableQueryable<T, object>>? include = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, bool enableTracking = false)
@@ -76,6 +78,13 @@ namespace Suwen.Infrastructure.Repositories
             return await Table.FindAsync(id);
         }
 
+        public async Task<T> GetByIdAsync(Guid id, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            return await Table.FindAsync(id);
+        }
         public async Task<List<Product>> GetAllWithCategoryAsync()
         {
             return await _dbContext.Products
