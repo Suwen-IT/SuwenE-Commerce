@@ -23,22 +23,13 @@ namespace Application.Features.CQRS.Users.Handlers
         }
         public async Task<ResponseModel<NoContentDto>> Handle (DeleteUserByIdCommandRequest request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid userIdGuid))
-            {
-                return new ResponseModel<NoContentDto>
-                {
-                    Success = false,
-                    Messages = new[] { "Invalid user ID format." },
-                    StatusCode = 400,
-                };
-            }
-            var user = await _userManager.FindByIdAsync(userIdGuid.ToString());
+            var user = await _userManager.FindByIdAsync(request.Id.ToString());
             if (user == null)
             {
                 return new ResponseModel<NoContentDto>
                 {
                     Success = false,
-                    Messages = new[] { "User not found." },
+                    Messages = new[] { "Kullanıcı bulunamadı." },
                     StatusCode = 404,
                 };
             }
@@ -48,7 +39,7 @@ namespace Application.Features.CQRS.Users.Handlers
                 return new ResponseModel<NoContentDto>
                 {
                     Success = true,
-                    Messages = new[] { "User successfully deleted." },
+                    Messages = new[] { "Kullanıcı başarıyla silindi." },
                     StatusCode = 200,
                 };
             }

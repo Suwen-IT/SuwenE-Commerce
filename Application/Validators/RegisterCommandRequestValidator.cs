@@ -8,36 +8,36 @@ public class RegisterCommandRequestValidator:AbstractValidator<RegisterCommandRe
     public RegisterCommandRequestValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required!")
-            .EmailAddress().WithMessage("Please enter a valid email address!");
+            .NotEmpty().WithMessage("E-posta alaný zorunludur!")
+            .EmailAddress().WithMessage("Lütfen geçerli bir E-posta adresi giriniz. ");
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required!")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters!")
-            .Matches("[A-Z]").WithMessage("Password must contain at least one upper case letter!")
-            .Matches("[a-z]").WithMessage("Password must contain at least one lower case!")
-            .Matches("[0-9]").WithMessage("Password must contain at least one numbers!")
-            .Matches("[^a-zA-Z0-9]").WithMessage("Password must contain at least one special character.");
+            .NotEmpty().WithMessage("Þifre alaný zorunludur!")
+            .MinimumLength(6).WithMessage("Þifre en az6 karakterden oluþmalýdýr!")
+            .Matches("[A-Z]").WithMessage("Þifre en az bir büyük harf içermelidir!")
+            .Matches("[a-z]").WithMessage("Þifre en az bir küçük harf içermelidir!")
+            .Matches("[0-9]").WithMessage("Þifre en az bir rakam içermelidir!")
+            .Matches("[^a-zA-Z0-9]").WithMessage("Þifre en az bir özel karakter içermelidir!");
         
         RuleFor(x=>x.ConfirmPassword)
-            .NotEmpty().WithMessage("Confirm password is required!")
-            .Equal(x => x.Password).WithMessage("Confirm password does not match!");
+            .NotEmpty().WithMessage("Þifre onaylama alaný zorunludur!")
+            .Equal(x => x.Password).WithMessage("Girrdiðiniz þifreler uyuþmamaktadýr.");
 
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("First name is required!");
+            .NotEmpty().WithMessage("Ýsim alaný zorunludur!");
         
         RuleFor(x=>x.LastName)
-            .NotEmpty().WithMessage("Last name is required!");
+            .NotEmpty().WithMessage("Soyisim alaný zorunludur!");
 
         RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("Username is required!")
-            .Length(6, 20).WithMessage("Username must be between 6 and 20 characters!")
-            .Matches("^[a-zA-Z0-9]*$").WithMessage("Username must contain only letters and numbers.");
+            .NotEmpty().WithMessage("Kullanýcý adý alaný zorunludur!")
+            .Length(6, 20).WithMessage("Kullanýcý adý 6-20 karakter arasýnda olmalýdýr.")
+            .Matches("^[a-zA-Z0-9]*$").WithMessage("Kulllanýcý adý harfler ve rakamlardan oluþmalýdýr.");
         
         RuleFor(x=>x.PhoneNumber)
-            .NotEmpty().WithMessage("Phone number is required!")
-            .Length(11).WithMessage("Phone number must be 11 digits!")
-            .Matches("^[0-9]*$").WithMessage("Phone number must contain only numbers.");
+            .NotEmpty().WithMessage("Telefon numarasý alaný zorunludur!")
+            .Length(11).WithMessage("Telefon numarasý 11 karakerden oluþmalýdýr!")
+            .Matches("^[0-9]*$").WithMessage("Telefon numarasý sadece rakamlardan oluþmalýdýr.");
 
     }
 }

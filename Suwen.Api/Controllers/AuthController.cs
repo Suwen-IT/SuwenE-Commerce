@@ -4,6 +4,7 @@ using Application.Features.CQRS.Users.Queries;
 using Application.Features.DTOs.Identity;
 using Application.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace Suwen.Api.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDto request)
         {
             var command = new RegisterCommandRequest()
@@ -42,6 +44,7 @@ namespace Suwen.Api.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
             var query = new LoginCommandRequest

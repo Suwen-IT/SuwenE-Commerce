@@ -1,6 +1,7 @@
 ﻿using Application.Services;
 using Domain.Constants;
 using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,13 +15,14 @@ namespace Infrastructure.Services
     public class TokenService : ITokenService
     {
         private readonly JwtOptions _jwtOptions;
-
-        public TokenService(IOptions<JwtOptions> jwtOptions)
+        private readonly UserManager<AppUser> _userManager;
+        public TokenService(IOptions<JwtOptions> jwtOptions,UserManager<AppUser> userManager)
         {
             _jwtOptions = jwtOptions.Value;
+            _userManager = userManager;
         }
 
-        public Token GenerateToken(AppUser user)
+        public async Task<Token> GenerateToken(AppUser user)
         {
 
             var claims = new List<Claim>
@@ -29,6 +31,11 @@ namespace Infrastructure.Services
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.Email, user.Email!),
         };
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             // 2. Şifreleme anahtarını oluştur
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));

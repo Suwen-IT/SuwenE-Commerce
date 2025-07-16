@@ -3,8 +3,10 @@ using Application.Mappers;
 using Domain.Constants;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Persistence.Context;
 using Suwen.Persistence;
+using Suwen.Persistence.Seeding;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,9 +27,37 @@ builder.Services.AddAutoMapper(typeof(ProductMap).Assembly);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(option => 
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Suwen API", Version = "v1" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
+    {
+        In = ParameterLocation.Header,
+        Description = "Lütfen geçerli bir token girin",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement 
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 var app = builder.Build();
+
+//await DataSeeder.SeedRolesAndAdminUser(app.Services, builder.Configuration);
 
 // Middleware Pipeline
 if (app.Environment.IsDevelopment())

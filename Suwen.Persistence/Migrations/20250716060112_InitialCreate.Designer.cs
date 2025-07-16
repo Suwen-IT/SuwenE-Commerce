@@ -12,7 +12,7 @@ using Persistence.Context;
 namespace Suwen.Persistence.Migrations
 {
     [DbContext(typeof(SuwenDbContext))]
-    [Migration("20250713100527_InitialCreate")]
+    [Migration("20250716060112_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

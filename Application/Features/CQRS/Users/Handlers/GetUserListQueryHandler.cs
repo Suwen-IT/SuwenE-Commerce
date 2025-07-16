@@ -42,7 +42,7 @@ namespace Application.Features.CQRS.Users.Handlers
             {
                 Data = userDtos,
                 Success = true,
-                Messages = new[] { "Users list successfully!" },
+                Messages = new[] { "Kullanıcı listesi başarıyla getirildi!" },
                 StatusCode = 200,
             };
         }

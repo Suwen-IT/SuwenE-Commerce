@@ -32,7 +32,7 @@ namespace Suwen.Infrastructure.Abstracts
                 return new AuthResponseDto
                 {
                     IsSuccess = false,
-                    Errors = new List<string> { "LoginRequest connot be null!" }
+                    Errors = new List<string> { "Giriş isteği boş olamaz!" }
                 };
             }
             
@@ -43,7 +43,7 @@ namespace Suwen.Infrastructure.Abstracts
                 return new()
                 {
                    IsSuccess = false,
-                   Errors = new List<string> { "Invalid credentials!" }
+                   Errors = new List<string> { "Geçersiz kimlik bilgleri!" }
                 };
             }
             
@@ -53,12 +53,12 @@ namespace Suwen.Infrastructure.Abstracts
                 return new AuthResponseDto
                 {
                     IsSuccess = false,
-                    Errors = new List<string> { "Invalid credentials!" }
+                    Errors = new List<string> { "Geçersiz kimlik bilgleri!" }
                 };
             }
 
             IList<string> roles = await _userManager.GetRolesAsync(user);
-            Token? token = _tokenService.GenerateToken(user);
+            Token? token = await _tokenService.GenerateToken(user);
 
             return new AuthResponseDto
             {
@@ -82,25 +82,25 @@ namespace Suwen.Infrastructure.Abstracts
                 return new AuthResponseDto
                 {
                     IsSuccess = false,
-                    Errors = new List<string> { "RegisterRequest connot be null!" }
+                    Errors = new List<string> { "Kullanıcı kayıt işlemi boş olamaz!" }
                 };
             }
             var errors = new List<string>();
 
             if (await _userManager.FindByEmailAsync(registerCommandRequest.Email) != null)
             {
-              errors.Add("Email is already in use!");
+              errors.Add("E-posta adresi kullanımdadır.");
             }
 
             if (await _userManager.FindByNameAsync(registerCommandRequest.UserName) != null)
             {
-                errors.Add("Username is already taken!");
+                errors.Add("Kullanıcı adı daha önce alınmıştır");
             }
             
             var userWithPhoneNumber = _userManager.Users.FirstOrDefault(u => u.PhoneNumber == registerCommandRequest.PhoneNumber);
             if (userWithPhoneNumber != null)
             {
-                errors.Add("Phone number is already in use!");
+                errors.Add("Telefon numarası kullanımdadır.");
             }
             if (errors.Any())
             {

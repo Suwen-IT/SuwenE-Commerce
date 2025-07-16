@@ -6,9 +6,9 @@ namespace Application.Features.CQRS.Users.Queries;
 
 public class GetUserByIdQueryRequest:IRequest<ResponseModel<UserDto>>
 {
-    public string Id { get; set; }
+    public Guid Id { get; set; }
 
-    public GetUserByIdQueryRequest( string id)
+    public GetUserByIdQueryRequest( Guid id)
     {
         Id = id;
     }

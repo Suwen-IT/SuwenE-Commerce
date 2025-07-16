@@ -10,6 +10,6 @@ namespace Application.Services
 {
     public interface ITokenService
     {
-        Token GenerateToken(AppUser appUser);
+        Task<Token> GenerateToken(AppUser appUser);
     }
 }

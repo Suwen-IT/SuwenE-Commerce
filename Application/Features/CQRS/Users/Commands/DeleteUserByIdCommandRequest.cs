@@ -7,9 +7,9 @@ namespace Application.Features.CQRS.Users.Commands
 {
     public class DeleteUserByIdCommandRequest:IRequest<ResponseModel<NoContentDto>>
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
-        public DeleteUserByIdCommandRequest(string id)
+        public DeleteUserByIdCommandRequest(Guid id)
         {
             Id = id;
         }

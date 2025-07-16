@@ -21,24 +21,15 @@ public class GetUserByIdQueryHandler:IRequestHandler<GetUserByIdQueryRequest,Res
     
     public async Task<ResponseModel<UserDto>> Handle(GetUserByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        if (!Guid.TryParse(request.Id, out Guid userGuidId))
-        {
-            return new ResponseModel<UserDto>
-            {
-                Success = false,
-                Messages = new[] { "Not a valid Id!" },
-                StatusCode = 400
-            };
-        }
         
-        var user = await _userManager.FindByIdAsync(userGuidId.ToString());
+        var user = await _userManager.FindByIdAsync(request.Id.ToString());
 
         if (user == null)
         {
             return new ResponseModel<UserDto>
             {
                 Success = false,
-                Messages = new[] { "User not found!" },
+                Messages = new[] { "Kullanýcý bulunamadý!" },
                 StatusCode = 400
             };
         }
@@ -52,7 +43,7 @@ public class GetUserByIdQueryHandler:IRequestHandler<GetUserByIdQueryRequest,Res
         {
             Data = userDto,
             Success = true,
-            Messages = new[] { "User successfully fetched!" },
+            Messages = new[] { "Kullanýcý kimliði baþarýyla eþleþtirildi." },
             StatusCode = 200
         };
     }
