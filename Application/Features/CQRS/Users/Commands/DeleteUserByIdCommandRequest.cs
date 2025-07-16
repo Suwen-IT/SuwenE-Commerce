@@ -1,18 +1,15 @@
 ﻿using Application.Common.Models;
+using Application.Features.DTOs.Identity;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.CQRS.Users.Commands
 {
-    public class DeleteUserByIdCommandRequest:IRequest<ResponseModel<bool>>
+    public class DeleteUserByIdCommandRequest:IRequest<ResponseModel<NoContentDto>>
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
-        public DeleteUserByIdCommandRequest(Guid id)
+        public DeleteUserByIdCommandRequest(string id)
         {
             Id = id;
         }

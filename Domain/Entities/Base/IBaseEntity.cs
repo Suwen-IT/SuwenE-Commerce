@@ -8,5 +8,8 @@ namespace Domain.Entities.Base
 {
     public interface IBaseEntity
     {
+        public int Id { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }

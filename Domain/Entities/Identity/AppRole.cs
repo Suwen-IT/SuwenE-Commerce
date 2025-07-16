@@ -11,6 +11,5 @@ namespace Domain.Entities.Identity
     {
         public DateTime? CreatedTime { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedTime { get; set; }
-        public bool IsDeleted { get; set; } = false;
     }
 }

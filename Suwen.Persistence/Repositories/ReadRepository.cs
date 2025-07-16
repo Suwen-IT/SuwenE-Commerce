@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -20,13 +20,13 @@ namespace Suwen.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        private DbSet<T> Table { get => _dbContext.Set<T>(); }
+        private DbSet<T> Table => _dbContext.Set<T>();
 
         public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
         {
             var query = Table.AsQueryable();
             if (predicate != null) Table.Where(predicate);
-            return await Table.CountAsync();
+            return await query.CountAsync();
         }
         public IQueryable<T> Find(Expression<Func<T, bool>> predicate, bool enableTracking = false)
         {
@@ -55,9 +55,9 @@ namespace Suwen.Infrastructure.Repositories
             if (include != null) queryable = include(queryable);
             if (predicate != null) queryable = queryable.Where(predicate);
             if (orderBy != null)
-                return await orderBy(queryable).Skip((currentPage-1)*pageSize).Take(pageSize).ToListAsync();
+                queryable=orderBy(queryable);
 
-            return await queryable.ToListAsync();
+            return await queryable.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>,IIncludableQueryable<T, object>>? include = null, bool enableTracking = false)
@@ -70,33 +70,33 @@ namespace Suwen.Infrastructure.Repositories
 
         public async Task<T> GetByIdAsync(int id, bool tracking = true)
         {
-            var query = Table.AsQueryable();
-
-            if (!tracking)
+            IQueryable<T> query = Table;
+            if (!tracking) 
                 query = query.AsNoTracking();
-
-            return await Table.FindAsync(id);
+            
+            var parameter = Expression.Parameter(typeof(T),"entity");
+            var property = Expression.Property(parameter, "Id");
+            var constant = Expression.Constant(id);
+            var body = Expression.Equal(property, constant);
+            var lambda = Expression.Lambda<Func<T,bool>>(body, parameter);
+            
+            return await query.FirstOrDefaultAsync(lambda);
         }
 
         public async Task<T> GetByIdAsync(Guid id, bool tracking = true)
         {
-            var query = Table.AsQueryable();
-            if (!tracking)
+            IQueryable<T> query = Table;
+            if (!tracking) 
                 query = query.AsNoTracking();
-            return await Table.FindAsync(id);
+            
+            var parameter = Expression.Parameter(typeof(T),"entity");
+            var property = Expression.Property(parameter, "Id");
+            var constant = Expression.Constant(id);
+            var body = Expression.Equal(property, constant);
+            var lambda = Expression.Lambda<Func<T,bool>>(body, parameter);
+            
+            return await query.FirstOrDefaultAsync(lambda);
         }
-        public async Task<List<Product>> GetAllWithCategoryAsync()
-        {
-            return await _dbContext.Products
-                                 .Include(p => p.Category)
-                                 .ToListAsync();
-        }
-
-        public async Task<Product> GetByIdWithCategoryAsync(int id)
-        {
-            return await _dbContext.Products
-            .Include(p => p.Category)
-            .FirstOrDefaultAsync(p => p.Id == id);
-        }
+        
     }
 }

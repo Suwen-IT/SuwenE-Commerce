@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using System;
@@ -17,10 +17,10 @@ namespace Suwen.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        private DbSet<T> Table { get => _dbContext.Set<T>(); }
+        private DbSet<T> Table => _dbContext.Set<T>();
         public async Task<bool> AddAsync(T entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
+            await Table.AddAsync(entity);
             return true;
         }
         public async Task AddRangeAsync(IList<T> entities)
@@ -30,17 +30,19 @@ namespace Suwen.Persistence.Repositories
 
         public async Task DeleteAsync(T entity)
         {
-           await Task.Run(() => Table.Remove(entity));
+            Table.Remove(entity);
+            await Task.CompletedTask;
+        } 
+        public async Task<T> UpdateAsync(T entity)
+        {
+            Table.Update(entity);
+            await Task.CompletedTask;
+            return entity;
         }
-
+        
         public async Task<bool> SaveChangesAsync()
         {
             return await _dbContext.SaveChangesAsync()>0;
-        }
-        public async Task<T> UpdateAsync(T entity)
-        {
-            await Task.Run(() => Table.Update(entity));
-            return entity;
         }
     }
 }

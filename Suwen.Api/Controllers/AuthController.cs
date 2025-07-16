@@ -14,55 +14,49 @@ namespace Suwen.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ITokenService _tokenService;
-
-        public AuthController(IMediator mediator, ITokenService tokenService)
+        public AuthController(IMediator mediator)
         {
             _mediator = mediator;
-            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterCommandRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterDto request)
         {
-            ResponseModel<UserRegisterDto> response = await _mediator.Send(request);
+            var command = new RegisterCommandRequest()
+            {
+                Email = request.Email,
+                Password = request.Password,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
+                UserName = request.Username,
+                ConfirmPassword = request.ConfirmPassword,
+            };
+            var response = await _mediator.Send(command);
 
-            if (response.Success is false)
-                return BadRequest(response);
-
-            return Ok(response);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCommandRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
-            ResponseModel<UserLoginDto> response = await _mediator.Send(request);
-            if (response.Success is false)
-                return BadRequest(response);
-
-            return Ok(response);
+            var query = new LoginCommandRequest
+            {
+                Email = request.Email,
+                Password = request.Password
+            };
+            
+            var response = await _mediator.Send(query);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return Unauthorized(response);
         }
-
-        [HttpGet("get-user-list")]
-
-        public async Task<IActionResult> GetUserList()
-        {
-            var command = new GetUserListQueryRequest();
-            var result = await _mediator.Send(command);
-
-            return result.Success ? Ok(result)
-                : BadRequest(result);
-        }
-
-        [HttpDelete("delete-user/{id}")]
-        public async Task<IActionResult> DeleteUserById([FromRoute] Guid userId)
-        {
-            ResponseModel<bool> response = await _mediator.Send(new DeleteUserByIdCommandRequest(userId));
-
-            if (!response.Success)
-                return BadRequest(response);
-
-            return Ok(response);
-        }
+        
     }
 }

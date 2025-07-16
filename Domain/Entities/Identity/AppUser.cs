@@ -10,18 +10,17 @@ namespace Domain.Entities.Identity
 {
     public class AppUser:IdentityUser<Guid>
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public bool IsMalformed {  get; set; }=false;
-        public bool IsAdmin { get; set; } = false;
+        public string FirstName { get; set; }=string.Empty;
+        public string LastName { get; set; }=string.Empty;
+        public override string? PhoneNumber { get; set; }=string.Empty;
+        public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedDate { get; set; }
 
-        public DateTime? CreatedTime { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedTime { get; set; }
-        public bool IsDeleted { get; set; } = false;
-
-        public ICollection<Order> Orders { get; set; }
-        public ICollection<Address> Addresses { get; set; }
-        public ICollection<Basket> Baskets { get; set; }
+        public ICollection<Order> Orders { get; set; }=new HashSet<Order>();
+        public ICollection<Address> Addresses { get; set; }=new HashSet<Address>();
+        public ICollection<Basket> Baskets { get; set; }=new HashSet<Basket>();
+        public ICollection<Review> Reviews { get; set; }=new HashSet<Review>();
+        public ICollection<Notification> Notifications { get; set; }=new HashSet<Notification>();
  
     }
 }

@@ -8,37 +8,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Features.DTOs.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.CQRS.Users.Handlers
 {
-    public class DeleteUserByIdCommandHandler : IRequestHandler<DeleteUserByIdCommandRequest, ResponseModel<bool>>
+    public class DeleteUserByIdCommandHandler : IRequestHandler<DeleteUserByIdCommandRequest, ResponseModel<NoContentDto>>
     {
-        private readonly IReadRepository<AppUser> _readRepository;
-        private readonly IWriteRepository<AppUser> _writeRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public DeleteUserByIdCommandHandler(IReadRepository<AppUser> readRepository, IWriteRepository<AppUser> writeRepository)
+        public DeleteUserByIdCommandHandler(UserManager<AppUser> userManager)
         {
-            _readRepository = readRepository;
-            _writeRepository = writeRepository;
+            _userManager = userManager;
         }
-        public async Task<ResponseModel<bool>> Handle (DeleteUserByIdCommandRequest request, CancellationToken cancellationToken)
+        public async Task<ResponseModel<NoContentDto>> Handle (DeleteUserByIdCommandRequest request, CancellationToken cancellationToken)
         {
-            var user = await _readRepository.GetByIdAsync(request.Id,tracking:true);
-
-            if (user is not null)
+            if (!Guid.TryParse(request.Id, out Guid userIdGuid))
             {
-                user.IsDeleted = true;
-                await _writeRepository.UpdateAsync(user);
-                var saveResult = await _writeRepository.SaveChangesAsync();
-
-                if (saveResult)
-                    return new ResponseModel<bool>(true, 200);
-               
-             return new ResponseModel<bool>("Failed to delete user", 500);
-              
+                return new ResponseModel<NoContentDto>
+                {
+                    Success = false,
+                    Messages = new[] { "Invalid user ID format." },
+                    StatusCode = 400,
+                };
             }
+            var user = await _userManager.FindByIdAsync(userIdGuid.ToString());
+            if (user == null)
+            {
+                return new ResponseModel<NoContentDto>
+                {
+                    Success = false,
+                    Messages = new[] { "User not found." },
+                    StatusCode = 404,
+                };
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return new ResponseModel<NoContentDto>
+                {
+                    Success = true,
+                    Messages = new[] { "User successfully deleted." },
+                    StatusCode = 200,
+                };
+            }
+            else
+            {
+                List<string>errors=new List<string>();
+                foreach (var error in result.Errors)
+                {
+                    errors.Add(error.Description);
+                }
 
-            return new ResponseModel<bool>("User not found", 404);
+                return new ResponseModel<NoContentDto>
+                {
+                    Success = false,
+                    Messages = errors.ToArray(),
+                    StatusCode = 400,
+                };
+            }
+           
         }
     }
 }

@@ -20,14 +20,15 @@ public class GetAllProductsQueryHandler:IRequestHandler<GetAllProductsQueryReque
     }
     public async Task<ResponseModel<List<ProductDto>>> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
     {
-        var products = await _repository.GetAllWithCategoryAsync();
+        /*var products = await _repository.GetAllWithCategoryAsync();
 
         if (products == null || !products.Any())
             return new ResponseModel<List<ProductDto>>("No products found", 404);
 
         var productDtos = _mapper.Map<List<ProductDto>>(products);
 
-        return new ResponseModel<List<ProductDto>>(productDtos, 200);
+        return new ResponseModel<List<ProductDto>>(productDtos, 200);*/
+        return null;
 
     }
 }

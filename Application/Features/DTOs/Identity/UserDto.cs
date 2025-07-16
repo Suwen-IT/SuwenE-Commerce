@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Application.Features.DTOs.Identity
 {
     public class UserDto
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool IsMalformed { get; set; } = false;
-        public bool IsAdmin { get; set; } = false;
+        public string Id { get; set; }
+        public string FirstName { get; set; }=string.Empty;
+        public string LastName { get; set; }=string.Empty;
+        public string Email { get; set; }=string.Empty;
+        public string PhoneNumber { get; set; }=string.Empty;
         public DateTime? CreatedAtUtc { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }

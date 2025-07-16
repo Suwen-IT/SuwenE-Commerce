@@ -15,7 +15,6 @@ namespace Application.Mappers
         {
             // Entity -> DTO
             CreateMap<Order, OrderDto>()
-                .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email));
 ;
         }
 

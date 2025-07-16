@@ -11,10 +11,14 @@ namespace Domain.Entities
 {
     public class Notification: BaseEntity
     {
-        public string Title { get; set; }
-        public string Message { get; set; }
-        public NotificationType Type { get; set; } = NotificationType.SystemOnly;
         public Guid AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public AppUser AppUser { get; set; } = default!;
+        
+        public string Title { get; set; }=string.Empty;
+        public string Message { get; set; }=string.Empty;
+        public NotificationType Type { get; set; } = NotificationType.SystemOnly;
+
+        public DateTime SentDate { get; set; } = DateTime.UtcNow;
+
     }
 }

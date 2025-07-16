@@ -1,11 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Interfaces.Repositories
 {
@@ -16,8 +12,6 @@ namespace Application.Interfaces.Repositories
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             bool enableTracking = false);
 
-        Task<List<Product>> GetAllWithCategoryAsync();
-        Task<Product> GetByIdWithCategoryAsync(int id);
 
         Task<List<T>> GetAllAsyncByPaging(Expression<Func<T, bool>>? predicate = null,
            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
@@ -30,8 +24,8 @@ namespace Application.Interfaces.Repositories
 
         IQueryable<T> Find(Expression<Func<T, bool>> predicate, bool enableTracking = false);
 
-        Task<T> GetByIdAsync(int id, bool tracking = true);
-        Task<T> GetByIdAsync(Guid id, bool tracking = true);
+        Task<T?> GetByIdAsync(int id, bool tracking = true);
+        Task<T?> GetByIdAsync(Guid id, bool tracking = true);
 
         Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null);
     }

@@ -5,34 +5,46 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities.Identity;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Application.Features.CQRS.Users.Handlers
 {
     public class GetUserListQueryHandler : IRequestHandler<GetUserListQueryRequest, ResponseModel<List<UserDto>>>
     {
 
-        private readonly IReadRepository<AppUser> _readRepository;
+        private readonly UserManager<AppUser>_userManager;
         private readonly IMapper _mapper;
 
-        public GetUserListQueryHandler(IReadRepository<AppUser> readRepository, IMapper mapper)
+        public GetUserListQueryHandler(UserManager<AppUser> userManager, IMapper mapper)
         {
-            _readRepository = readRepository;
+            _userManager = userManager;
             _mapper = mapper;
         }
         public async Task<ResponseModel<List<UserDto>>> Handle(GetUserListQueryRequest request, CancellationToken cancellationToken)
         {
-            var users = await _readRepository.GetAllAsync(u=>u.IsDeleted==false);
+            var users = await _userManager.Users.AsNoTracking().ToListAsync(cancellationToken);
+            
+            var userDtos = _mapper.Map<List<UserDto>>(users);
 
-            if(users is null)
-                return new ResponseModel<List<UserDto>>("Users are empty");
+            foreach (var userDto in userDtos)
+            {
+                var user=users.FirstOrDefault(u =>u.Id.ToString()== userDto.Id);
+                if (user != null)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    userDto.Roles = roles.ToList();
+                }
+            }
 
-            var mappedUsers = _mapper.Map<List<UserDto>>(users);
-            return new ResponseModel<List<UserDto>>(mappedUsers, 200);
+            return new ResponseModel<List<UserDto>>()
+            {
+                Data = userDtos,
+                Success = true,
+                Messages = new[] { "Users list successfully!" },
+                StatusCode = 200,
+            };
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Domain.Entities
 {
     public class Basket:BaseEntity
     {
-        public Guid UserId { get; set; }
-        public AppUser User { get; set; }
+        public Guid AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
         
-        public ICollection<BasketItem>BasketItems { get; set; }=new List<BasketItem>();
+        public ICollection<BasketItem>BasketItems { get; set; }=new HashSet<BasketItem>();
     }
 }
