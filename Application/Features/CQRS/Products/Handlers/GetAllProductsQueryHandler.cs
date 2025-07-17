@@ -6,6 +6,7 @@ using Application.Mappers;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.CQRS.Products.Handlers;
 
@@ -20,15 +21,20 @@ public class GetAllProductsQueryHandler:IRequestHandler<GetAllProductsQueryReque
     }
     public async Task<ResponseModel<List<ProductDto>>> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
     {
-        /*var products = await _repository.GetAllWithCategoryAsync();
+        var products = await _repository.GetAllAsyncByPaging(
+            include: query => query.Include(p => p.Category),
+            orderBy: query => query.OrderBy(p => p.Name),
+            currentPage: request.CurrentPage,
+            pageSize: request.PageSize);
 
-        if (products == null || !products.Any())
-            return new ResponseModel<List<ProductDto>>("No products found", 404);
-
+        if(products==null||!products.Any())
+        {
+            return new ResponseModel<List<ProductDto>>(new[] { "Hiç ürün bulunamadý." }, 404);
+        }
         var productDtos = _mapper.Map<List<ProductDto>>(products);
-
-        return new ResponseModel<List<ProductDto>>(productDtos, 200);*/
-        return null;
+        return new ResponseModel<List<ProductDto>>(productDtos, 200);
 
     }
+
+    
 }

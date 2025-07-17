@@ -1,11 +1,11 @@
 ﻿using Application.Common.Models;
-using Application.Features.CQRS.Products.Queries;
+using Application.Features.CQRS.Users.Queries;
 using Application.Features.DTOs.Identity;
 using Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Features.CQRS.Products.Handlers
+namespace Application.Features.CQRS.Users.Handlers
 {
     public class GetUserForUpdateQueryHandler : IRequestHandler<GetUserForUpdateQueryRequest, ResponseModel<UserUpdateDto>>
     {

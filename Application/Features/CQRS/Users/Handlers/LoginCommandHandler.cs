@@ -25,7 +25,7 @@ namespace Application.Features.CQRS.Users.Handlers
             return new ResponseModel<AuthResponseDto>
             {
                 Data = authResponse,
-                Success=authResponse.IsSuccess,
+                Success = authResponse.IsSuccess,
                 Messages = authResponse.Errors?.ToArray(),
                 StatusCode = authResponse.IsSuccess ? 200 : 401
             };

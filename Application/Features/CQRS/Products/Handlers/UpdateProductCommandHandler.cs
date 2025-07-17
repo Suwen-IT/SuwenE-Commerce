@@ -1,14 +1,15 @@
 using Application.Common.Models;
 using Application.Features.CQRS.Products.Commands;
+using Application.Features.DTOs.Products;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System.Net;
+
 
 namespace Application.Features.CQRS.Products.Handlers;
 
-public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, ResponseModel<int>>
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, ResponseModel<ProductDto>>
 {
     private readonly IWriteRepository<Product> _writeRepository;
     private readonly IReadRepository<Product> _readRepository;
@@ -19,16 +20,23 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         _readRepository = readRepository;
         _mapper = mapper;
     }
-    public async Task<ResponseModel<int>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseModel<ProductDto>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
     {
         var product = await _readRepository.GetByIdAsync(request.Id);
         if (product == null)
-            return new ResponseModel<int>("Product not found", 404);
+        {
+            return new ResponseModel<ProductDto>( "Ürün Bulunamadý" , 404);
+        }
         _mapper.Map(request, product);
 
         await _writeRepository.UpdateAsync(product);
-        await _writeRepository.SaveChangesAsync();
+       var saved= await _writeRepository.SaveChangesAsync();
 
-        return new ResponseModel<int>(product.Id, 200);
+        if (!saved)
+        {
+            return new ResponseModel<ProductDto>("Ürün güncellenmedi" , 500);
+        }
+        var updateDto = _mapper.Map<ProductDto>(product);
+        return new ResponseModel<ProductDto>(updateDto, 200);
     }
 }

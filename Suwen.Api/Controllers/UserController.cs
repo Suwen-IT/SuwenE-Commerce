@@ -4,7 +4,6 @@ using Application.Features.CQRS.Users.Commands;
 using Application.Features.CQRS.Users.Queries;
 using Application.Features.DTOs.Identity;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -21,8 +20,7 @@ public class UserController:ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [HttpGet("getall")]
     public async Task<IActionResult> GetAllUsers()
     {
         var query = new GetUserListQueryRequest();
@@ -34,8 +32,8 @@ public class UserController:ControllerBase
         return BadRequest(response);
     }
 
-    [HttpGet("{id}")]
-    [Authorize(Roles = "Admin,User")]
+    [HttpGet("get-by-id")]
+   
     public async Task<IActionResult> GetUserById(Guid id)
     {
         var currentUserId=User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -52,8 +50,8 @@ public class UserController:ControllerBase
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    [HttpDelete("id/for-delete")]
+ 
     public async Task<IActionResult> DeleteUser(Guid id)
     {
         var command=new DeleteUserByIdCommandRequest(id);
@@ -65,8 +63,7 @@ public class UserController:ControllerBase
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("{id}/for-update")]
-    [Authorize(Roles = "Admin,User")]
+    [HttpGet("id/for-update")]
     public async Task<IActionResult> GetUserForUpdate(Guid id)
     {
         var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -84,8 +81,7 @@ public class UserController:ControllerBase
         return StatusCode(response.StatusCode, response.Messages);
     }
 
-    [HttpPut("{id}")]
-    [Authorize(Roles = "Admin,User")]
+    [HttpPut("update-by-id")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommandRequest command)
     {
         if (id != command.Id)

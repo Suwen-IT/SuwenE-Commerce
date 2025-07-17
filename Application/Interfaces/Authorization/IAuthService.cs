@@ -9,5 +9,7 @@ namespace Application.Interfaces
     {
         Task<AuthResponseDto> RegisterAsync(RegisterCommandRequest registerCommandRequest, string? role = "User");
         Task<AuthResponseDto> LoginAsync(LoginCommandRequest loginCommandRequest);
+
+        Task<bool>InvalidateRefreshTokenAsync(string userId);
     }
 }

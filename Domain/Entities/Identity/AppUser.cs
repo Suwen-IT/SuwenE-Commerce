@@ -10,6 +10,10 @@ namespace Domain.Entities.Identity
         public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedDate { get; set; }
 
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiration { get; set; }
+
+
         public ICollection<Order> Orders { get; set; }=new HashSet<Order>();
         public ICollection<Address> Addresses { get; set; }=new HashSet<Address>();
         public ICollection<Basket> Baskets { get; set; }=new HashSet<Basket>();

@@ -21,7 +21,6 @@ namespace Suwen.Api.Controllers
         }
 
         [HttpPost("register")]
-        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDto request)
         {
             var command = new RegisterCommandRequest()
@@ -44,7 +43,6 @@ namespace Suwen.Api.Controllers
         }
 
         [HttpPost("login")]
-        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
             var query = new LoginCommandRequest
@@ -60,6 +58,18 @@ namespace Suwen.Api.Controllers
             }
             return Unauthorized(response);
         }
-        
+
+       
+        [HttpPost("logout")]
+        public async Task<IActionResult>Logout()
+        {
+            var response = await _mediator.Send(new LogoutCommandRequest());
+            if (!response.Success)
+            {
+                return StatusCode(response.StatusCode,response);
+            }
+            return StatusCode(response.StatusCode, response);
+        }
+
     }
 }

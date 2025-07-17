@@ -5,6 +5,7 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.CQRS.Products.Handlers;
 
@@ -21,14 +22,18 @@ public class GetProductByIdQueryHandler:IRequestHandler<GetProductByIdQueryReque
     
     public async Task<ResponseModel<ProductDto>> Handle(GetProductByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        /*var product = await _repository.GetByIdWithCategoryAsync(request.Id);
+        var product = await _repository.GetAsync(
+            predicate: x => x.Id == request.Id,
+            include: query => query.Include(p => p.Category)
+                .Include(p => p.ProductAttributeValues)
+                .ThenInclude(p => p.ProductAttribute));
 
         if (product == null)
-            return new ResponseModel<ProductDto>("Product not found", 404);
-
+        {
+            return new ResponseModel<ProductDto>("Ürün bulunamadý.", 404);
+        }
         var productDto = _mapper.Map<ProductDto>(product);
+        return new ResponseModel<ProductDto>(productDto, 200);
 
-        return new ResponseModel<ProductDto>(productDto, 200);*/
-        return null;
     }
 }

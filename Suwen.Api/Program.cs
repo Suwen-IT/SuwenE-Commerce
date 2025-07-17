@@ -23,7 +23,7 @@ builder.Services.AddDbContext<SuwenDbContext>(options =>
 
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
-builder.Services.AddAutoMapper(typeof(ProductMap).Assembly);
+builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -67,6 +67,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication(); // Önce Authentication
 app.UseAuthorization();  // Sonra Authorization
 app.MapControllers();

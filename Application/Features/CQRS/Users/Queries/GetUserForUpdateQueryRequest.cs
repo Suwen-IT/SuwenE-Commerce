@@ -2,7 +2,7 @@
 using Application.Features.DTOs.Identity;
 using MediatR;
 
-namespace Application.Features.CQRS.Products.Queries
+namespace Application.Features.CQRS.Users.Queries
 {
     public class GetUserForUpdateQueryRequest:IRequest<ResponseModel<UserUpdateDto>>
     {

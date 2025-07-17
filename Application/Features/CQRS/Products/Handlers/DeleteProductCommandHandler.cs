@@ -5,10 +5,11 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.CQRS.Products.Handlers;
 
-public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, ResponseModel<int>>
+public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, ResponseModel<ProductDto>>
 {
     private readonly IReadRepository<Product> _readRepository;
     private readonly IWriteRepository<Product> _writeRepository;
@@ -21,18 +22,23 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandR
         _mapper = mapper;
     }
        
-    public async Task<ResponseModel<int>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseModel<ProductDto>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var product = await _readRepository.GetByIdAsync(request.Id);
+        var product = await _readRepository.GetAsync(
+            predicate: p => p.Id == request.Id,
+            include: query => query.Include(p => p.Category));
 
         if (product == null)
-            return new ResponseModel<int>("Product not found or already removed", 400);
+            return new ResponseModel<ProductDto>("Ürün bulunamadý veya zaten silinmiþ", 404);
 
         await _writeRepository.DeleteAsync(product);
-        await _writeRepository.SaveChangesAsync();
+        var saved = await _writeRepository.SaveChangesAsync();
+
+        if (!saved)
+            return new ResponseModel<ProductDto>("Ürün silinirken bir sorun oluþtu", 500);
 
         var productDto = _mapper.Map<ProductDto>(product);
+        return new ResponseModel<ProductDto>(productDto, 200);
 
-        return new ResponseModel<int>(product.Id,200);
     }
 }

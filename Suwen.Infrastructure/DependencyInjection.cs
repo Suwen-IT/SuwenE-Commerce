@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Interfaces.CurrentService;
 using Application.Services;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Suwen.Infrastructure.Abstracts;
+using Suwen.Infrastructure.Concretes;
 using System.Text;
 
 namespace Infrastructure;
@@ -38,6 +40,9 @@ public static class DependencyInjection
         });
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+       
 
         return services;
     }

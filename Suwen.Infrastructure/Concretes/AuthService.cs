@@ -25,6 +25,21 @@ namespace Suwen.Infrastructure.Abstracts
             _tokenService = tokenService;
         }
 
+        public async Task<bool> InvalidateRefreshTokenAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false; 
+            }
+            user.RefreshToken = null;
+            user.RefreshTokenExpiration = null;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
+        }
+
         public async Task<AuthResponseDto> LoginAsync(LoginCommandRequest loginCommandRequest)
         {
             if (loginCommandRequest is null)

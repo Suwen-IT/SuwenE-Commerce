@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Application.Validators
 {
-    public class UpdateCommandRequestValidator:AbstractValidator<UpdateUserCommandRequest>
+    public class UpdateUserCommandRequestValidator:AbstractValidator<UpdateUserCommandRequest>
     {
-        public UpdateCommandRequestValidator()
+        public UpdateUserCommandRequestValidator()
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Kullanıcı ID alanı zorunludur!");

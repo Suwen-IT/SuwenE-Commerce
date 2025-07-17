@@ -27,12 +27,23 @@ where TRequest : IRequest<TResponse>
                 var responseType=typeof(TResponse);
                 if (responseType.IsGenericType && responseType.GetGenericTypeDefinition() == typeof(ResponseModel<>))
                 {
-                    var responseInstance=(dynamic)Activator.CreateInstance(responseType)!;
-                    responseInstance.Success = false;
-                    responseInstance.Messages = failures.Select(f => f.ErrorMessage).ToArray();
-                    responseInstance.StatusCode = 400;
-                    
-                    return responseInstance;
+                    var dataType = responseType.GetGenericArguments()[0];
+
+                    var constructor=typeof(ResponseModel<>)
+                        .MakeGenericType(dataType)
+                        .GetConstructor(new[] { typeof(string[]), typeof(int) });
+
+                    if (constructor != null)
+                    {
+                        var instance = constructor.Invoke(new object[]
+                         {
+                             failures.Select(f => f.ErrorMessage).ToArray(),400 
+                         });
+
+                        return (TResponse)instance!;
+                    }
+
+                    throw new InvalidOperationException($"ResponseModel<{dataType.Name}> uygun bir constructor ile oluþturulamadý.");
                 }
                 
                 throw new ValidationException(failures);
