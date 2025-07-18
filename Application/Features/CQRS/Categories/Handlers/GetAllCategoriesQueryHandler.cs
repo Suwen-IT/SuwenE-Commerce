@@ -27,7 +27,7 @@ namespace Application.Features.CQRS.Categories.Handlers
             var categories = await _repository.GetAllAsync();
 
             if (categories == null || !categories.Any())
-                return new ResponseModel<List<CategoryDto>>("No categories found", 404);
+                return new ResponseModel<List<CategoryDto>>("Hiç kategori bulunamadı", 204);
 
             var categoryDtos = _mapper.Map<List<CategoryDto>>(categories);
             return new ResponseModel<List<CategoryDto>>(categoryDtos, 200);

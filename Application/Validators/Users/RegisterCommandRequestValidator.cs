@@ -1,7 +1,7 @@
 using Application.Features.CQRS.Users.Commands;
 using FluentValidation;
 
-namespace Application.Validators;
+namespace Application.Validators.Users;
 
 public class RegisterCommandRequestValidator:AbstractValidator<RegisterCommandRequest>
 {

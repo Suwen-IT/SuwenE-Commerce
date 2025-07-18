@@ -1,7 +1,6 @@
 ﻿using Application.Features.CQRS.Categories.Commands;
 using Application.Features.CQRS.Categories.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Suwen.Api.Controllers
@@ -22,9 +21,7 @@ namespace Suwen.Api.Controllers
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoyCommandRequest request)
         {
             var response = await _mediator.Send(request);
-            if (response.StatusCode == 200)
-                return Ok(response);
-            return BadRequest(response);
+            return StatusCode(response.StatusCode, response);
         }
 
 
@@ -32,37 +29,29 @@ namespace Suwen.Api.Controllers
         public async Task<IActionResult> GetAllCategories()
         {
             var response = await _mediator.Send(new GetAllCategoriesQueryRequest());
-            if (response.StatusCode == 200)
-                return Ok(response);
-            return NotFound(response);
+           return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("getbyid/{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
-            var response = await _mediator.Send(new GetCategoryByIdQueryRequest { Id = id });
-            if (response.StatusCode == 200)
-                return Ok(response);
-            return NotFound(response);
+            var response = await _mediator.Send(new GetCategoryByIdQueryRequest(id));
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("delete/{id}")]
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var response = await _mediator.Send(new DeleteCategoryCommandRequest { Id = id });
-            if (response.StatusCode == 200)
-                return Ok(response);
-            return NotFound(response);
+            var response = await _mediator.Send(new DeleteCategoryCommandRequest(id));
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpPut("update")]
         public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommandRequest request)
         {
             var response = await _mediator.Send(request);
-            if (response.StatusCode == 200)
-                return Ok(response);
-            return BadRequest(response);
+            return StatusCode(response.StatusCode, response);
         }
     }
 

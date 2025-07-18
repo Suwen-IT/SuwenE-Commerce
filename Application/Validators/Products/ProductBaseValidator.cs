@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces.Validations;
 using FluentValidation;
 
-namespace Application.Validators
+namespace Application.Validators.Products
 {
     public abstract class ProductBaseValidator<T>:AbstractValidator<T>
     where T : class, IProductCommandBase

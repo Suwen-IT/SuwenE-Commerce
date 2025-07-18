@@ -51,7 +51,7 @@ public class CreateProductCommandHandler:IRequestHandler<CreateProductCommandReq
         }
 
         var productDto = _mapper.Map<ProductDto>(createdProduct);
-        return new ResponseModel<ProductDto>(productDto, 200);
+        return new ResponseModel<ProductDto>(productDto, 201);
 
     }
 }

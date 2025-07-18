@@ -29,7 +29,7 @@ public class GetAllProductsQueryHandler:IRequestHandler<GetAllProductsQueryReque
 
         if(products==null||!products.Any())
         {
-            return new ResponseModel<List<ProductDto>>(new[] { "Hiç ürün bulunamadý." }, 404);
+            return new ResponseModel<List<ProductDto>>(new[] { "Hiç ürün bulunamadý." }, 204);
         }
         var productDtos = _mapper.Map<List<ProductDto>>(products);
         return new ResponseModel<List<ProductDto>>(productDtos, 200);

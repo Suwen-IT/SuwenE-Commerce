@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Validators
+namespace Application.Validators.Users
 {
     public class UpdateUserCommandRequestValidator:AbstractValidator<UpdateUserCommandRequest>
     {

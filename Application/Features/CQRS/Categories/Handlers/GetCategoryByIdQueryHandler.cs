@@ -5,11 +5,6 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.CQRS.Categories.Handlers
 {
@@ -28,7 +23,7 @@ namespace Application.Features.CQRS.Categories.Handlers
             var category = await _repository.GetByIdAsync(request.Id);
 
             if (category == null)
-                return new ResponseModel<CategoryDto>("Category not found", 404);
+                return new ResponseModel<CategoryDto>($"Kategoi bulunamadı.(Id:{request.Id})", 204);
 
             var categoryDto = _mapper.Map<CategoryDto>(category);
             return new ResponseModel<CategoryDto>(categoryDto, 200);

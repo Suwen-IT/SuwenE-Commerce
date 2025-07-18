@@ -1,0 +1,18 @@
+﻿using Application.Common.Models;
+using Application.Features.DTOs;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Features.CQRS.ProductAttributeValues.Commands
+{
+    public class CreateProductAttributeValueCommandRequest : IRequest<ResponseModel<ProductAttributeValueDto>>
+    {
+        public string Value { get; set; } = string.Empty;
+        public int ProductId { get; set; }
+        public int ProductAttributeId { get; set; }
+    }
+}

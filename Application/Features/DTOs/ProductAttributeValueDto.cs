@@ -6,6 +6,11 @@ namespace Application.Features.DTOs
         public int Id { get; set; }
         public string Value { get; set; } = string.Empty;
         public int ProductAttributeId { get; set; }
-        public string ProductAttributeName { get; set; } = string.Empty;
+        public int ProductId { get; set; }
+
+        public string? ProductAttributeName { get; set; }
+        public string? ProductName { get; set; }
+
+
     }
 }

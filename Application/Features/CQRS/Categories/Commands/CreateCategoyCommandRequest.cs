@@ -1,15 +1,14 @@
 ﻿using Application.Common.Models;
+using Application.Features.DTOs.Categories;
+using Application.Interfaces.Validations;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.CQRS.Categories.Commands
 {
-    public class CreateCategoyCommandRequest:IRequest<ResponseModel<int>>
+    public class CreateCategoyCommandRequest:IRequest<ResponseModel<CategoryDto>>,ICategoryCommandBase
     {
         public string Name { get; set; }
     }
+    
 }

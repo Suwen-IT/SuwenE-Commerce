@@ -30,7 +30,7 @@ public class GetProductByIdQueryHandler:IRequestHandler<GetProductByIdQueryReque
 
         if (product == null)
         {
-            return new ResponseModel<ProductDto>("Ürün bulunamadý.", 404);
+            return new ResponseModel<ProductDto>("Ürün bulunamadý.", 204);
         }
         var productDto = _mapper.Map<ProductDto>(product);
         return new ResponseModel<ProductDto>(productDto, 200);
