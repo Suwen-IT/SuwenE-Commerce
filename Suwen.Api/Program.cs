@@ -15,14 +15,13 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureService(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
 
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 // Database Context
 builder.Services.AddDbContext<SuwenDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
 
 builder.Services.AddControllers();
@@ -67,9 +66,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
-app.UseAuthentication(); // Önce Authentication
-app.UseAuthorization();  // Sonra Authorization
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

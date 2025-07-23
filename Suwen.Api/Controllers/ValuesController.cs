@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces.UnitOfWorks;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Suwen.Api.Controller
 {

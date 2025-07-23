@@ -43,7 +43,7 @@ where TRequest : IRequest<TResponse>
                         return (TResponse)instance!;
                     }
 
-                    throw new InvalidOperationException($"ResponseModel<{dataType.Name}> uygun bir constructor ile oluþturulamadý.");
+                    throw new InvalidOperationException($"ResponseModel<{dataType.Name}> uygun bir constructor ile oluÅŸturulamadÄ±.");
                 }
                 
                 throw new ValidationException(failures);

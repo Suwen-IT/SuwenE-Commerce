@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Suwen.Infrastructure.Abstracts;
 using Suwen.Infrastructure.Concretes;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure;
 
@@ -21,6 +22,7 @@ public static class DependencyInjection
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme=JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(options =>
         {
@@ -35,8 +37,18 @@ public static class DependencyInjection
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtOptions:Key"])),
                 ClockSkew = TimeSpan.Zero 
             };
+            options.Events = new JwtBearerEvents
+            {
+                OnChallenge = context =>
+                {
+                    context.HandleResponse();
+                    context.Response.StatusCode = 401;
+                    context.Response.ContentType = "application/json";
+                    var result = System.Text.Json.JsonSerializer.Serialize(new { error = "Unauthorized" });
+                    return context.Response.WriteAsync(result);
+                }
+            };
 
-            
         });
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthService, AuthService>();

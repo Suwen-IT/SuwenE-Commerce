@@ -29,9 +29,8 @@ namespace Application.Features.CQRS.ProductAttributes.Handlers
             var entity = await _repository.GetByIdAsync(request.Id);
 
             if(entity == null)
-            {
-                return new ResponseModel<ProductAttributeDto>("Belirtilen özellik bulunamadı", 204);
-            }
+                return new ResponseModel<ProductAttributeDto>("Belirtilen nitelik bulunamadı", 404);
+            
             var dto=_mapper.Map<ProductAttributeDto>(entity);
             return new ResponseModel<ProductAttributeDto>(dto, 200);
         }

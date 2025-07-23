@@ -5,11 +5,7 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.CQRS.ProductAttributes.Handlers
 {
@@ -32,16 +28,16 @@ namespace Application.Features.CQRS.ProductAttributes.Handlers
             var existingEntity = await _readRepository.GetByIdAsync(request.Id);
             if(existingEntity == null)
             {
-                return new ResponseModel<ProductAttributeDto>("Güncellemek istenen ürün özelliği bulunmadı", 204);
+                return new ResponseModel<ProductAttributeDto>("Güncellemek istenen ürün niteliği bulunmadı", 404);
             }
             _mapper.Map(request,existingEntity);
 
-            _writeRepository.UpdateAsync(existingEntity);
+            await _writeRepository.UpdateAsync(existingEntity);
             var saved = await _writeRepository.SaveChangesAsync();
 
             if (!saved)
             {
-                return new ResponseModel<ProductAttributeDto>("Ürün özelliği güncellenirken bir hata oluştu", 500);
+                return new ResponseModel<ProductAttributeDto>("Ürün niteliği güncellenirken bir hata oluştu", 500);
             }
 
             var dto=_mapper.Map<ProductAttributeDto>(existingEntity);

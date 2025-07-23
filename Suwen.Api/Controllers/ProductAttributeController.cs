@@ -1,10 +1,6 @@
 ﻿using Application.Features.CQRS.ProductAttributes.Commands;
 using Application.Features.CQRS.ProductAttributes.Queries;
-using Application.Features.CQRS.Products.Commands;
-using Application.Features.CQRS.Products.Queries;
-using Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Suwen.Api.Controllers

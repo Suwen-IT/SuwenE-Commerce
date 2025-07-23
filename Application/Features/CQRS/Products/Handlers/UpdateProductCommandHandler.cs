@@ -6,37 +6,44 @@ using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
-
-namespace Application.Features.CQRS.Products.Handlers;
-
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, ResponseModel<ProductDto>>
 {
-    private readonly IWriteRepository<Product> _writeRepository;
     private readonly IReadRepository<Product> _readRepository;
+    private readonly IReadRepository<Category> _categoryReadRepository;
+    private readonly IWriteRepository<Product> _writeRepository;
     private readonly IMapper _mapper;
-    public UpdateProductCommandHandler(IWriteRepository<Product> writeRepository, IReadRepository<Product> readRepository, IMapper mapper)
+
+    public UpdateProductCommandHandler(
+        IReadRepository<Product> readRepository,
+        IReadRepository<Category> categoryReadRepository,
+        IWriteRepository<Product> writeRepository,
+        IMapper mapper)
     {
-        _writeRepository = writeRepository;
         _readRepository = readRepository;
+        _categoryReadRepository = categoryReadRepository;
+        _writeRepository = writeRepository;
         _mapper = mapper;
     }
+
     public async Task<ResponseModel<ProductDto>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var product = await _readRepository.GetByIdAsync(request.Id);
-        if (product == null)
-        {
-            return new ResponseModel<ProductDto>( "Ürün Bulunamadý" , 404);
-        }
-        _mapper.Map(request, product);
+        var existingEntity = await _readRepository.GetByIdAsync(request.Id);
+        if (existingEntity == null)
+            return new ResponseModel<ProductDto>("GÃ¼ncellenmek istenen Ã¼rÃ¼n bulunamadÄ±.", 404);
 
-        await _writeRepository.UpdateAsync(product);
-       var saved= await _writeRepository.SaveChangesAsync();
+        var categoryExists = await _categoryReadRepository.GetByIdAsync(request.CategoryId);
+        if (categoryExists == null)
+            return new ResponseModel<ProductDto>("Kategori bulunamadÄ±.", 404);
+
+        _mapper.Map(request, existingEntity);
+
+        await _writeRepository.UpdateAsync(existingEntity);
+        var saved = await _writeRepository.SaveChangesAsync();
 
         if (!saved)
-        {
-            return new ResponseModel<ProductDto>("Ürün güncellenmedi" , 500);
-        }
-        var updateDto = _mapper.Map<ProductDto>(product);
-        return new ResponseModel<ProductDto>(updateDto, 200);
+            return new ResponseModel<ProductDto>("ÃœrÃ¼n gÃ¼ncellenirken bir hata oluÅŸtu.", 500);
+
+        var dto = _mapper.Map<ProductDto>(existingEntity);
+        return new ResponseModel<ProductDto>(dto, 200);
     }
 }

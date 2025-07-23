@@ -1,12 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Common.Models;
+using Application.Features.CQRS.ProductAttributeValues.Commands;
+using Application.Interfaces.Repositories;
+using Domain.Entities;
+using MediatR;
 
-namespace Application.Features.CQRS.ProductAttributeValues.Handlers
+public class DeleteProductAttributeValueCommandHandler : IRequestHandler<DeleteProductAttributeValueCommandRequest, ResponseModel<NoContent>>
 {
-    internal class DeleteProductAttributeValueCommandHandler
+    private readonly IReadRepository<ProductAttributeValue> _readRepository;
+    private readonly IWriteRepository<ProductAttributeValue> _writeRepository;
+
+    public DeleteProductAttributeValueCommandHandler(
+        IReadRepository<ProductAttributeValue> readRepository,
+        IWriteRepository<ProductAttributeValue> writeRepository)
     {
+        _readRepository = readRepository;
+        _writeRepository = writeRepository;
+    }
+
+    public async Task<ResponseModel<NoContent>> Handle(DeleteProductAttributeValueCommandRequest request, CancellationToken cancellationToken)
+    {
+        var entity = await _readRepository.GetByIdAsync(request.Id);
+        if (entity == null)
+            return new ResponseModel<NoContent>("Silinmek istenen ürün niteliği değeri bulunamadı.", 404);
+
+        await _writeRepository.DeleteAsync(entity);
+        var saved = await _writeRepository.SaveChangesAsync();
+
+        if (!saved)
+            return new ResponseModel<NoContent>("Ürün niteliği değeri silinirken bir hata oluştu.", 500);
+
+        return new ResponseModel<NoContent>(new NoContent(), 204);
     }
 }

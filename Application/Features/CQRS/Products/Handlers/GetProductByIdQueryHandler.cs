@@ -5,35 +5,26 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
-namespace Application.Features.CQRS.Products.Handlers;
-
-public class GetProductByIdQueryHandler:IRequestHandler<GetProductByIdQueryRequest,ResponseModel<ProductDto>>
+public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryRequest, ResponseModel<ProductDto>>
 {
-    private readonly IReadRepository<Product> _repository;
+    private readonly IReadRepository<Product> _readRepository;
     private readonly IMapper _mapper;
 
-    public GetProductByIdQueryHandler(IReadRepository<Product> repository,IMapper mapper)
+    public GetProductByIdQueryHandler(IReadRepository<Product> readRepository, IMapper mapper)
     {
-        _repository = repository;
+        _readRepository = readRepository;
         _mapper = mapper;
     }
-    
+
     public async Task<ResponseModel<ProductDto>> Handle(GetProductByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var product = await _repository.GetAsync(
-            predicate: x => x.Id == request.Id,
-            include: query => query.Include(p => p.Category)
-                .Include(p => p.ProductAttributeValues)
-                .ThenInclude(p => p.ProductAttribute));
+        var product = await _readRepository.GetByIdAsync(request.Id);
 
         if (product == null)
-        {
-            return new ResponseModel<ProductDto>("Ürün bulunamadý.", 204);
-        }
-        var productDto = _mapper.Map<ProductDto>(product);
-        return new ResponseModel<ProductDto>(productDto, 200);
+            return new ResponseModel<ProductDto>("ÃœrÃ¼n bulunamadÄ±.", 404);
 
+        var dto = _mapper.Map<ProductDto>(product);
+        return new ResponseModel<ProductDto>(dto, 200);
     }
 }

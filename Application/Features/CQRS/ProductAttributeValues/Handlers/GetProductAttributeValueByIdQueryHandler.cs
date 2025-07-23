@@ -1,12 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Common.Models;
+using Application.Features.CQRS.ProductAttributeValues.Queries;
+using Application.Features.DTOs;
+using Application.Interfaces.Repositories;
+using AutoMapper;
+using Domain.Entities;
+using MediatR;
 
-namespace Application.Features.CQRS.ProductAttributeValues.Handlers
+public class GetProductAttributeValueByIdQueryHandler : IRequestHandler<GetProductAttributeValueByIdQueryRequest, ResponseModel<ProductAttributeValueDto>>
 {
-    internal class GetProductAttributeValueByIdQueryHandler
+    private readonly IReadRepository<ProductAttributeValue> _readRepository;
+    private readonly IMapper _mapper;
+
+    public GetProductAttributeValueByIdQueryHandler(IReadRepository<ProductAttributeValue> readRepository, IMapper mapper)
     {
+        _readRepository = readRepository;
+        _mapper = mapper;
+    }
+
+    public async Task<ResponseModel<ProductAttributeValueDto>> Handle(GetProductAttributeValueByIdQueryRequest request, CancellationToken cancellationToken)
+    {
+        var entity = await _readRepository.GetByIdAsync(request.Id);
+
+        if (entity == null)
+            return new ResponseModel<ProductAttributeValueDto>("Ürün niteliği değeri bulunamadı.", 404);
+
+        var dto = _mapper.Map<ProductAttributeValueDto>(entity);
+        return new ResponseModel<ProductAttributeValueDto>(dto, 200);
     }
 }

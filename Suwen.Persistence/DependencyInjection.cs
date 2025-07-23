@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Application.Interfaces.UnitOfWorks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,10 +18,11 @@ namespace Suwen.Persistence
         {
             services.AddDbContext<SuwenDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-          
-            services.AddIdentity<AppUser,AppRole>()
+
+            services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<SuwenDbContext>()
                 .AddDefaultTokenProviders();
+            
 
             services.Configure<IdentityOptions>(options =>
             {

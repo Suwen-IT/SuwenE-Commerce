@@ -1,15 +1,16 @@
 ﻿using Application.Features.CQRS.Products.Commands;
+using Application.Interfaces.Repositories;
+using Domain.Entities;
 using FluentValidation;
-
 
 namespace Application.Validators.Products
 {
-    public class UpdateProductCommandRequestValidator:ProductBaseValidator<UpdateProductCommandRequest>
+    public class UpdateProductCommandRequestValidator : ProductBaseValidator<UpdateProductCommandRequest>
     {
-        public UpdateProductCommandRequestValidator()
+        public UpdateProductCommandRequestValidator():base()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("Ürün ID'si geçerli bir değer olmalıdır.");
+                .GreaterThan(0).WithMessage("Geçerli bir ürün ID'si giriniz.");
         }
     }
 }

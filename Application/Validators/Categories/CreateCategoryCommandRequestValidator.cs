@@ -5,5 +5,9 @@ namespace Application.Validators.Categories
 {
     public class CreateCategoryCommandRequestValidator:CategoryBaseValidator<CreateCategoyCommandRequest>
     {
+        public CreateCategoryCommandRequestValidator() : base()
+        {
+            
+        }
     }
 }

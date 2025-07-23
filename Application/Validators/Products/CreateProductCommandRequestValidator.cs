@@ -4,7 +4,7 @@ namespace Application.Validators.Products
 {
     public class CreateProductCommandRequestValidator:ProductBaseValidator<CreateProductCommandRequest>
     {
-        public CreateProductCommandRequestValidator()
+        public CreateProductCommandRequestValidator():base()
         {
            
         }

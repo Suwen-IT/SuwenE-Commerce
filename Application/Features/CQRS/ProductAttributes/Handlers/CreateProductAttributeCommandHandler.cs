@@ -5,11 +5,6 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.CQRS.ProductAttributes.Handlers
 {
@@ -34,7 +29,7 @@ namespace Application.Features.CQRS.ProductAttributes.Handlers
 
             if (!saved)
             {
-                return new ResponseModel<ProductAttributeDto> ("Ürün özelliği eklenirken bir sorun oluştu",500);
+                return new ResponseModel<ProductAttributeDto> ("Ürün niteliği oluşturulurken bir sorun oluştu",500);
             }
             var dto = _mapper.Map<ProductAttributeDto>(productAttribute);
             return new ResponseModel<ProductAttributeDto>(dto,200);

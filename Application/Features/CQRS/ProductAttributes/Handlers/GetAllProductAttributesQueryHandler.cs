@@ -29,9 +29,7 @@ namespace Application.Features.CQRS.ProductAttributes.Handlers
             var list = await _repository.GetAllAsync();
 
             if(list == null||!list.Any())
-            {
-                return new ResponseModel<List<ProductAttributeDto>>("Ürün özellikleri bulunmamaktadır.", 204);
-            }
+                return new ResponseModel<List<ProductAttributeDto>>("Ürün niteliği bulunmamaktadır.", 404);
 
             var dtoList=_mapper.Map<List<ProductAttributeDto>>(list);
             return new ResponseModel<List<ProductAttributeDto>>(dtoList, 200);

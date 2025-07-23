@@ -1,14 +1,12 @@
 ﻿using Application.Features.CQRS.ProductAttributes.Commands;
+using Application.Interfaces.Repositories;
+using Domain.Entities;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Validators.ProductAttributes
 {
-    public class UpdateProductAttributeCommandRequestValidator:ProductAttributeBaseValidator<UpdateProductAttributeCommandRequest>
+    public class UpdateProductAttributeCommandRequestValidator 
+        : ProductAttributeBaseValidator<UpdateProductAttributeCommandRequest>
     {
         public UpdateProductAttributeCommandRequestValidator()
         {

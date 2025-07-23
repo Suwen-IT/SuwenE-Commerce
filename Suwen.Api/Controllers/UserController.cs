@@ -1,5 +1,4 @@
 using Application.Common.Models;
-using Application.Features.CQRS.Products.Queries;
 using Application.Features.CQRS.Users.Commands;
 using Application.Features.CQRS.Users.Queries;
 using Application.Features.DTOs.Identity;
@@ -87,7 +86,7 @@ public class UserController:ControllerBase
         if (id != command.Id)
         {
           
-            return BadRequest(new ResponseModel<NoContentDto>("URL'deki kullanýcý ID'si ile istek gövdesindeki ID uyuþmuyor.", 400));
+            return BadRequest(new ResponseModel<NoContentDto>("URL'deki kullanï¿½cï¿½ ID'si ile istek gï¿½vdesindeki ID uyuï¿½muyor.", 400));
         }
         var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (User.IsInRole("User") && currentUserId != id.ToString())

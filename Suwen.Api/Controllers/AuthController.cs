@@ -1,11 +1,6 @@
-﻿using Application.Common.Models;
-using Application.Features.CQRS.Users.Commands;
-using Application.Features.CQRS.Users.Queries;
+﻿using Application.Features.CQRS.Users.Commands;
 using Application.Features.DTOs.Identity;
-using Application.Services;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Suwen.Api.Controllers

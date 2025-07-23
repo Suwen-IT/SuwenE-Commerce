@@ -1,15 +1,13 @@
 ﻿using Application.Common.Models;
 using Application.Features.DTOs;
+using Application.Interfaces.Validations;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.CQRS.ProductAttributeValues.Commands
 {
-    public class UpdateProductAttributeValueCommandRequest : IRequest<ResponseModel<ProductAttributeValueDto>>
+    public class UpdateProductAttributeValueCommandRequest : IRequest<ResponseModel<ProductAttributeValueDto>>,
+        IProductAttributeValueCommandBase
     {
         public int Id { get; set; }
         public string Value { get; set; } = string.Empty;
