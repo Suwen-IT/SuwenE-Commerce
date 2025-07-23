@@ -1,5 +1,4 @@
-﻿
-using Application.Interfaces.Validations;
+﻿using Application.Interfaces.Validations;
 using FluentValidation;
 
 namespace Application.Validators.Products
@@ -25,9 +24,6 @@ namespace Application.Validators.Products
 
             RuleFor(x => x.Price)
                 .GreaterThan(0).WithMessage("Ürün fiyatı sıfırdan büyük olmalıdır.");
-
-            RuleFor(x => x.Stock)
-                .GreaterThanOrEqualTo(0).WithMessage("Stok miktarı sıfırdan küçük olmamalıdır.");
 
             RuleFor(x => x.CategoryId)
                 .GreaterThan(0).WithMessage("Geçerli bir kategori ID'si giriniz.");

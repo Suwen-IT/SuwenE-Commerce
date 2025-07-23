@@ -10,7 +10,8 @@ namespace Application.Features.DTOs
 
         public string? ProductAttributeName { get; set; }
         public string? ProductName { get; set; }
-
+        public int Stock { get; set; }
+        public int ReservedStock { get; set; }
 
     }
 }

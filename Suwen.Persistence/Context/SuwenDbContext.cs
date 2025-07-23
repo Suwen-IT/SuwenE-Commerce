@@ -65,11 +65,25 @@ namespace Persistence.Context
                 .HasForeignKey(bi=>bi.ProductAttributeValueId)
                 .IsRequired(false);
             
+            builder.Entity<BasketItem>()
+                .Property(bi=> bi.ReservationExpirationDate)
+                .IsRequired(false);
+
             builder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
-            
+
+            builder.Entity<ProductAttributeValue>()
+               .Property(pav => pav.Stock)
+               .IsRequired()
+               .HasDefaultValue(0);
+
+            builder.Entity<ProductAttributeValue>()
+                .Property(pav => pav.ReservedStock)
+                .IsRequired()
+                .HasDefaultValue(0);
+
             builder.Entity<Notification>()
                 .HasOne(o => o.AppUser)
                 .WithMany(u => u.Notifications)
