@@ -4,7 +4,7 @@ using FluentValidation;
 namespace Application.Validators.Reviews
 {
     public class ReviewBaseValidator<T>:AbstractValidator<T>
-    where T : IReviewCommandBase
+    where T : class, IReviewCommandBase
     {
         public ReviewBaseValidator()
         {

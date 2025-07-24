@@ -1,15 +1,15 @@
 ﻿using Application.Interfaces;
-using Application.Interfaces.CurrentService;
-using Application.Services;
+using Application.Interfaces.Services;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Suwen.Infrastructure.Abstracts;
 using Suwen.Infrastructure.Concretes;
+using Suwen.Infrastructure.Services;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure;
 
@@ -54,7 +54,9 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-       
+        services.AddScoped<IReservationService, ReservationService>();
+        services.AddHostedService<ExpiredReservationCleanupService>();
+
 
         return services;
     }

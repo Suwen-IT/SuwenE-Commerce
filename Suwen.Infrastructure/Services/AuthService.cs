@@ -1,7 +1,7 @@
 ﻿using Application.Features.CQRS.Users.Commands;
 using Application.Features.DTOs.Identity;
 using Application.Interfaces;
-using Application.Services;
+using Application.Interfaces.Services;
 using Domain.Constants;
 using Domain.Entities.Identity;
 

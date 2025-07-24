@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Features\CQRS\Baskets\Queries\GetBasketSummaryQueryRequest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.3.0" />
@@ -17,10 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\CQRS\Baskets\Handlers\" />
   </ItemGroup>
 
 </Project>

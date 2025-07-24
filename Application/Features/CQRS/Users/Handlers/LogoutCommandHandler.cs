@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Users.Commands;
 using Application.Interfaces;
-using Application.Interfaces.CurrentService;
+using Application.Interfaces.Services;
 using MediatR;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿using Application.Common.Models;
-using Application.Features.DTOs;
+using Application.Features.DTOs.Products;
 using Application.Interfaces.Validations;
 using MediatR;
 

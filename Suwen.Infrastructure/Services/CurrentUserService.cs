@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.CurrentService;
+﻿using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 

@@ -1,4 +1,4 @@
-﻿using Application.Services;
+﻿using Application.Interfaces.Services;
 using Domain.Constants;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;

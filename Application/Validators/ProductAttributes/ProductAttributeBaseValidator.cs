@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.ProductAttributes
 {
-    public class ProductAttributeBaseValidator<T>:AbstractValidator<T> where T : IProductAttributeCommandBase
+    public class ProductAttributeBaseValidator<T>:AbstractValidator<T> where T :class, IProductAttributeCommandBase
     {
         public ProductAttributeBaseValidator()
         {

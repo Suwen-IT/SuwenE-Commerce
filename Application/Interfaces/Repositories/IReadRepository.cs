@@ -28,5 +28,7 @@ namespace Application.Interfaces.Repositories
         Task<T?> GetByIdAsync(Guid id, bool tracking = true);
 
         Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null);
+        IQueryable<T> Query(bool enableTracking = false);
+
     }
 }

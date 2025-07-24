@@ -4,7 +4,7 @@ using FluentValidation;
 namespace Application.Validators.Addresses;
 
 public class AddressBaseValidator<T>: AbstractValidator<T>
-where T:IAddressCommandBase
+where T: class, IAddressCommandBase
 {
     public AddressBaseValidator()
     {

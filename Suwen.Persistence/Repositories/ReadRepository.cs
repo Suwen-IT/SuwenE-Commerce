@@ -1,14 +1,8 @@
 using Application.Interfaces.Repositories;
-using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Persistence.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Suwen.Infrastructure.Repositories
 {
@@ -97,6 +91,12 @@ namespace Suwen.Infrastructure.Repositories
             
             return await query.FirstOrDefaultAsync(lambda);
         }
-        
+
+        public IQueryable<T> Query(bool enableTracking = false)
+        {
+            return enableTracking ? Table : Table.AsNoTracking();
+        }
+
+
     }
 }

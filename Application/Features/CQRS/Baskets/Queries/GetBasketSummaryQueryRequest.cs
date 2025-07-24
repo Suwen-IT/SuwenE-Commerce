@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.CQRS.Baskets.Queries
 {
-    public class GetBasketSummaryQuery:IRequest<ResponseModel<BasketSummaryDto>>
+    public class GetBasketSummaryQueryRequest:IRequest<ResponseModel<BasketSummaryDto>>
     {
         public Guid AppUserId { get; set; }
     }

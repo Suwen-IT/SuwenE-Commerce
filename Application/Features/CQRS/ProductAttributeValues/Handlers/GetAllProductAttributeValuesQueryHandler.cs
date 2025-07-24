@@ -1,6 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.ProductAttributeValues.Queries;
-using Application.Features.DTOs;
+using Application.Features.DTOs.Products;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;

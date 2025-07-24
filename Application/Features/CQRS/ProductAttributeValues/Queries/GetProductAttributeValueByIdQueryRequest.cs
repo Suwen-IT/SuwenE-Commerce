@@ -1,5 +1,5 @@
 ﻿using Application.Common.Models;
-using Application.Features.DTOs;
+using Application.Features.DTOs.Products;
 using MediatR;
 using System;
 using System.Collections.Generic;

@@ -9,6 +9,7 @@ namespace Application.Features.CQRS.Baskets.Commands
         public int BasketItemId { get; set; }
         public int Quantity { get; set; }
         public Guid AppUserId { get; set; }
+      
     }
     
 }

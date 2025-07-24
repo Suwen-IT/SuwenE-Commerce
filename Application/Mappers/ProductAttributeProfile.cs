@@ -1,8 +1,8 @@
 ﻿using Application.Features.CQRS.ProductAttributes.Commands;
-using Application.Features.DTOs;
 using AutoMapper;
 using System;
 using Domain.Entities;
+using Application.Features.DTOs.Products;
 
 namespace Application.Mappers
 {

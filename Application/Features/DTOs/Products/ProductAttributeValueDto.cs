@@ -1,5 +1,4 @@
-﻿
-namespace Application.Features.DTOs
+﻿namespace Application.Features.DTOs.Products
 {
     public class ProductAttributeValueDto
     {
