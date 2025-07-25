@@ -4,6 +4,7 @@ using Application.Features.DTOs.Products;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.Products;
 using MediatR;
 
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, ResponseModel<ProductDto>>

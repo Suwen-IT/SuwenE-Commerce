@@ -4,7 +4,8 @@ using Application.Features.DTOs.Baskets;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.Baskets;
+using Domain.Entities.Products;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

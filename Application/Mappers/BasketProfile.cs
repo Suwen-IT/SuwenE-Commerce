@@ -1,6 +1,6 @@
 ﻿using Application.Features.DTOs.Baskets;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.Baskets;
 
 namespace Application.Mappers
 {

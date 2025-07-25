@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Entities.Baskets;
+using Domain.Entities.Orders;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities.Identity
 {

@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.ProductAttributes.Commands;
 using Application.Interfaces.Repositories;
-using Domain.Entities;
+using Domain.Entities.Products;
 using MediatR;
 
 namespace Application.Features.CQRS.ProductAttributes.Handlers

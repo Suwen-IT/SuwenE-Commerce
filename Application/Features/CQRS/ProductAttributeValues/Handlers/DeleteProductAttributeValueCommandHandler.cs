@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.ProductAttributeValues.Commands;
 using Application.Interfaces.Repositories;
-using Domain.Entities;
+using Domain.Entities.Products;
 using MediatR;
 
 public class DeleteProductAttributeValueCommandHandler : IRequestHandler<DeleteProductAttributeValueCommandRequest, ResponseModel<NoContent>>

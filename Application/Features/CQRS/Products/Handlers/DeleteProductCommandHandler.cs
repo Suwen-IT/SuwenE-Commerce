@@ -1,7 +1,7 @@
 using Application.Common.Models;
 using Application.Features.CQRS.Products.Commands;
 using Application.Interfaces.Repositories;
-using Domain.Entities;
+using Domain.Entities.Products;
 using MediatR;
 
 public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, ResponseModel<NoContent>>

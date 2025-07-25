@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Base;
 using Domain.Entities.Identity;
+using Domain.Entities.Orders;
 
 namespace Domain.Entities
 {

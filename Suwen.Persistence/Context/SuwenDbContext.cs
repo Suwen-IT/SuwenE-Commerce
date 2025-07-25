@@ -2,13 +2,10 @@ using Domain.Entities;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using Domain.Entities.Base;
+using Domain.Entities.Baskets;
+using Domain.Entities.Products;
+using Domain.Entities.Orders;
 
 namespace Persistence.Context
 {

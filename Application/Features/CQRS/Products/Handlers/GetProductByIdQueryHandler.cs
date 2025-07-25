@@ -3,7 +3,7 @@ using Application.Features.CQRS.Products.Queries;
 using Application.Features.DTOs.Products;
 using Application.Interfaces.Repositories;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.Products;
 using MediatR;
 
 public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryRequest, ResponseModel<ProductDto>>

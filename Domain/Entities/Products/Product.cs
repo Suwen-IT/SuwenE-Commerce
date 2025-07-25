@@ -1,6 +1,8 @@
 ﻿using Domain.Entities.Base;
+using Domain.Entities.Baskets;
+using Domain.Entities.Orders;
 
-namespace Domain.Entities
+namespace Domain.Entities.Products
 {
     public class Product:BaseEntity
     {

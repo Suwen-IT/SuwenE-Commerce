@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using Domain.Entities;
+using Domain.Entities.Baskets;
+using Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 
 namespace Suwen.Infrastructure.Services
@@ -57,7 +58,7 @@ namespace Suwen.Infrastructure.Services
                 return false;
 
             pav.ReservedStock=Math.Max(0, pav.ReservedStock - quantity);
-
+            pav.Stock += quantity;
             var updated= await _productAttributeValueWriteRepository.UpdateAsync(pav);
             if (updated == null)
                 return false;

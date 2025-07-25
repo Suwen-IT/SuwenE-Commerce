@@ -2,7 +2,7 @@
 using Application.Features.CQRS.Baskets.Queries;
 using Application.Features.DTOs.Baskets;
 using Application.Interfaces.Repositories;
-using Domain.Entities;
+using Domain.Entities.Baskets;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

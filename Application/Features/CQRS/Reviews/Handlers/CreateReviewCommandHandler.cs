@@ -5,6 +5,7 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Entities.Identity;
+using Domain.Entities.Products;
 using MediatR;
 
 namespace Application.Features.CQRS.Reviews.Handlers

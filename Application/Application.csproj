@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Validators\NewFolder\**" />
+    <EmbeddedResource Remove="Validators\NewFolder\**" />
+    <None Remove="Validators\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Features\CQRS\Baskets\Queries\GetBasketSummaryQueryRequest.cs" />
   </ItemGroup>
 

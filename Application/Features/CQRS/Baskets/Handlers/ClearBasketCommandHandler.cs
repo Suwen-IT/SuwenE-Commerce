@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Baskets.Commands;
 using Application.Interfaces.Repositories;
-using Domain.Entities;
+using Domain.Entities.Baskets;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

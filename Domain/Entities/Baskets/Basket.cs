@@ -2,7 +2,7 @@
 using Domain.Entities.Identity;
 
 
-namespace Domain.Entities
+namespace Domain.Entities.Baskets
 {
     public class Basket:BaseEntity
     {

@@ -3,7 +3,7 @@ using Application.Features.CQRS.ProductAttributes.Queries;
 using Application.Features.DTOs.Products;
 using Application.Interfaces.Repositories;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.Products;
 using MediatR;
 using System;
 using System.Collections.Generic;

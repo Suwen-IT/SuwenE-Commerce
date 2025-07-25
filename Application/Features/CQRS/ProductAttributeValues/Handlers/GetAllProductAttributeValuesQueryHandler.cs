@@ -3,7 +3,7 @@ using Application.Features.CQRS.ProductAttributeValues.Queries;
 using Application.Features.DTOs.Products;
 using Application.Interfaces.Repositories;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.Products;
 using MediatR;
 
 public class GetAllProductAttributeValuesQueryHandler : IRequestHandler<GetAllProductAttributeValuesQueryRequest, ResponseModel<List<ProductAttributeValueDto>>>

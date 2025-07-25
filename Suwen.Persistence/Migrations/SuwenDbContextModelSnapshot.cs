@@ -73,7 +73,7 @@ namespace Suwen.Persistence.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Basket", b =>
+            modelBuilder.Entity("Domain.Entities.Baskets.Basket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,7 +97,7 @@ namespace Suwen.Persistence.Migrations
                     b.ToTable("Baskets");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BasketItem", b =>
+            modelBuilder.Entity("Domain.Entities.Baskets.BasketItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -321,7 +321,7 @@ namespace Suwen.Persistence.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Order", b =>
+            modelBuilder.Entity("Domain.Entities.Orders.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -364,7 +364,7 @@ namespace Suwen.Persistence.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OrderItem", b =>
+            modelBuilder.Entity("Domain.Entities.Orders.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -404,7 +404,7 @@ namespace Suwen.Persistence.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.Products.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -443,7 +443,7 @@ namespace Suwen.Persistence.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProductAttribute", b =>
+            modelBuilder.Entity("Domain.Entities.Products.ProductAttribute", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -466,7 +466,7 @@ namespace Suwen.Persistence.Migrations
                     b.ToTable("ProductAttributes");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProductAttributeValue", b =>
+            modelBuilder.Entity("Domain.Entities.Products.ProductAttributeValue", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -661,7 +661,7 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Basket", b =>
+            modelBuilder.Entity("Domain.Entities.Baskets.Basket", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.AppUser", "AppUser")
                         .WithMany("Baskets")
@@ -672,19 +672,19 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BasketItem", b =>
+            modelBuilder.Entity("Domain.Entities.Baskets.BasketItem", b =>
                 {
-                    b.HasOne("Domain.Entities.Basket", "Basket")
+                    b.HasOne("Domain.Entities.Baskets.Basket", "Basket")
                         .WithMany("BasketItems")
                         .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.ProductAttributeValue", "ProductAttributeValue")
+                    b.HasOne("Domain.Entities.Products.ProductAttributeValue", "ProductAttributeValue")
                         .WithMany()
                         .HasForeignKey("ProductAttributeValueId");
 
-                    b.HasOne("Domain.Entities.Product", "Product")
+                    b.HasOne("Domain.Entities.Products.Product", "Product")
                         .WithMany("BasketItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -708,7 +708,7 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Order", b =>
+            modelBuilder.Entity("Domain.Entities.Orders.Order", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.AppUser", "AppUser")
                         .WithMany("Orders")
@@ -734,19 +734,19 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("ShippingAddress");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OrderItem", b =>
+            modelBuilder.Entity("Domain.Entities.Orders.OrderItem", b =>
                 {
-                    b.HasOne("Domain.Entities.Order", "Order")
+                    b.HasOne("Domain.Entities.Orders.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.ProductAttributeValue", "ProductAttributeValue")
+                    b.HasOne("Domain.Entities.Products.ProductAttributeValue", "ProductAttributeValue")
                         .WithMany()
                         .HasForeignKey("ProductAttributeValueId");
 
-                    b.HasOne("Domain.Entities.Product", "Product")
+                    b.HasOne("Domain.Entities.Products.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -759,7 +759,7 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("ProductAttributeValue");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.Products.Product", b =>
                 {
                     b.HasOne("Domain.Entities.Category", "Category")
                         .WithMany("Products")
@@ -770,15 +770,15 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProductAttributeValue", b =>
+            modelBuilder.Entity("Domain.Entities.Products.ProductAttributeValue", b =>
                 {
-                    b.HasOne("Domain.Entities.ProductAttribute", "ProductAttribute")
+                    b.HasOne("Domain.Entities.Products.ProductAttribute", "ProductAttribute")
                         .WithMany("ProductAttributeValues")
                         .HasForeignKey("ProductAttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Product", "Product")
+                    b.HasOne("Domain.Entities.Products.Product", "Product")
                         .WithMany("ProductAttributeValues")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -797,7 +797,7 @@ namespace Suwen.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Product", "Product")
+                    b.HasOne("Domain.Entities.Products.Product", "Product")
                         .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -866,7 +866,7 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("ShippingOrders");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Basket", b =>
+            modelBuilder.Entity("Domain.Entities.Baskets.Basket", b =>
                 {
                     b.Navigation("BasketItems");
                 });
@@ -889,12 +889,12 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Order", b =>
+            modelBuilder.Entity("Domain.Entities.Orders.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.Products.Product", b =>
                 {
                     b.Navigation("BasketItems");
 
@@ -905,7 +905,7 @@ namespace Suwen.Persistence.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProductAttribute", b =>
+            modelBuilder.Entity("Domain.Entities.Products.ProductAttribute", b =>
                 {
                     b.Navigation("ProductAttributeValues");
                 });

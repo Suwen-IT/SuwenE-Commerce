@@ -1,13 +1,8 @@
 ﻿using Domain.Entities.Base;
 using Domain.Entities.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain.Entities.Enums;
 
-namespace Domain.Entities
+namespace Domain.Entities.Orders
 {
     public class Order: BaseEntity
     {
@@ -16,7 +11,7 @@ namespace Domain.Entities
 
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalPrice { get; set; }
-        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Beklemede;
         
         public int ShippingAddressId { get; set; }
         public Address ShippingAddress { get; set; } = default!;

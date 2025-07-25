@@ -1,6 +1,6 @@
 using Domain.Entities.Base;
 
-namespace Domain.Entities;
+namespace Domain.Entities.Products;
 
 public class ProductAttribute: BaseEntity
 {
