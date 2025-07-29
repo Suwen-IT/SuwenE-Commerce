@@ -9,10 +9,4 @@ public class GetAddressByIdQueryRequest:IRequest<ResponseModel<AddressDto>>
     public int Id { get; set; }
     public Guid AppUserId { get; set; }
 
-    public GetAddressByIdQueryRequest(int id, Guid appUserId)
-    {
-        Id = id;
-        AppUserId = appUserId;
-    }
-    
 }

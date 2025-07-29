@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.Mappers;
+using Application.Middleware;
 using Domain.Constants;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -64,10 +65,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

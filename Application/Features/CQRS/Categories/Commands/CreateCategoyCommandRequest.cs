@@ -9,6 +9,7 @@ namespace Application.Features.CQRS.Categories.Commands
     public class CreateCategoyCommandRequest:IRequest<ResponseModel<CategoryDto>>,ICategoryCommandBase
     {
         public string Name { get; set; }
+        public int? ParentCategoryId { get; set; }
     }
     
 }

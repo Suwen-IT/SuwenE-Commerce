@@ -1,7 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Users.Queries;
 using Application.Features.DTOs.Identity;
-using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities.Identity;
 using MediatR;

@@ -65,6 +65,12 @@ namespace Persistence.Context
             builder.Entity<BasketItem>()
                 .Property(bi=> bi.ReservationExpirationDate)
                 .IsRequired(false);
+            
+            builder.Entity<Category>()
+                .HasMany(c=>c.SubCategories)
+                .WithOne(c=>c.ParentCategory)
+                .HasForeignKey(c=>c.ParentCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Product>()
                 .HasOne(p => p.Category)

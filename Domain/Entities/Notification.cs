@@ -12,8 +12,8 @@ namespace Domain.Entities
         public string Title { get; set; }=string.Empty;
         public string Message { get; set; }=string.Empty;
         public NotificationType Type { get; set; } = NotificationType.SystemOnly;
-
         public DateTime SentDate { get; set; } = DateTime.UtcNow;
+        public bool IsRead { get; set; } = false;
 
     }
 }

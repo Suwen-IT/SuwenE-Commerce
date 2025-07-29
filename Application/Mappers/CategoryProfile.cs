@@ -10,7 +10,8 @@ namespace Application.Mappers
     {
         public CategoryProfile()
         {
-            CreateMap<Category, CategoryDto>();
+            CreateMap<Category, CategoryDto>()
+                .ForMember(dest => dest.SubCategories, opt => opt.MapFrom(src => src.SubCategories));
     
             CreateMap<CreateCategoyCommandRequest, Category>()
                  .ForMember(dest => dest.Id, opt => opt.Ignore())

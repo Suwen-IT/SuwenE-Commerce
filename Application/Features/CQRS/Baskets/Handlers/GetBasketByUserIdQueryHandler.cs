@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Baskets.Queries;
 using Application.Features.DTOs.Baskets;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using AutoMapper;
 using Domain.Entities.Baskets;
 using MediatR;
@@ -11,19 +11,22 @@ namespace Application.Features.CQRS.Baskets.Handlers
 {
     public class GetBasketByUserIdQueryHandler : IRequestHandler<GetBasketByUserIdQueryRequest, ResponseModel<BasketDto>>
     {
-        private readonly IReadRepository<Basket> _basketReadRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetBasketByUserIdQueryHandler(IReadRepository<Basket> basketReadRepository, IMapper mapper)
+        public GetBasketByUserIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _basketReadRepository = basketReadRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         public async Task<ResponseModel<BasketDto>> Handle(GetBasketByUserIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var basket = await _basketReadRepository.GetAsync(
-                b => b.AppUserId == request.AppUserId,
-                include: b => b.Include(x => x.BasketItems));
+            var basket = await _unitOfWork.GetReadRepository<Basket>()
+                .GetAsync(
+                    predicate: b => b.AppUserId == request.AppUserId,
+                    include: b => b.Include(b => b.BasketItems),
+                    enableTracking: false);
 
             if (basket == null)
             {

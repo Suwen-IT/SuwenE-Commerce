@@ -1,10 +1,6 @@
-using System.Security.Claims;
-using Application.Common.Models;
 using Application.Features.CQRS.Addresses.Commands;
 using Application.Features.CQRS.Addresses.Queries;
-using Application.Features.DTOs.Addresses;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Suwen.Api.Controllers
@@ -37,7 +33,7 @@ namespace Suwen.Api.Controllers
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAddress(int id, Guid userId)
         {
-            var request = new DeleteAddressCommandRequest(id, userId);
+            var request = new DeleteAddressCommandRequest{Id = id,AppUserId = userId};
             var result = await _mediator.Send(request);
             return StatusCode(result.StatusCode, result);
         }
@@ -45,7 +41,7 @@ namespace Suwen.Api.Controllers
         [HttpGet("GetById")]
         public async Task<IActionResult> GetAddressById(int id, Guid userId)
         {
-            var request = new GetAddressByIdQueryRequest(id, userId);
+            var request = new GetAddressByIdQueryRequest { Id = id, AppUserId = userId };
             var result = await _mediator.Send(request);
             return StatusCode(result.StatusCode, result);
         }
@@ -53,7 +49,7 @@ namespace Suwen.Api.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAddresses(Guid userId)
         {
-            var request = new GetAllAddressesQueryRequest(userId);
+            var request = new GetAllAddressesQueryRequest { AppUserId = userId};
             var result = await _mediator.Send(request);
             return StatusCode(result.StatusCode, result);
         }

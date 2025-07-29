@@ -1,5 +1,4 @@
 using Application.Common.Models;
-using Application.Features.DTOs.Products;
 using MediatR;
 
 namespace Application.Features.CQRS.Products.Commands;

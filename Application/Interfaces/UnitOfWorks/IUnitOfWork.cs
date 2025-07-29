@@ -6,6 +6,8 @@ namespace Application.Interfaces.UnitOfWorks
     {
         IReadRepository<T> GetReadRepository<T>() where T : class;
         IWriteRepository<T> GetWriteRepository<T>() where T : class;
+        int Save();
         Task<int> SaveChangesAsync();
+        Task<bool>SaveChangesBoolAsync();
     }
 }

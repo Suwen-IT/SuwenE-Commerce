@@ -11,7 +11,6 @@ using Domain.Entities.Products;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Application.Features.CQRS.Orders.Handlers
 {
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommandRequest, ResponseModel<OrderDto>>
@@ -32,8 +31,7 @@ namespace Application.Features.CQRS.Orders.Handlers
 
         public async Task<ResponseModel<OrderDto>> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
         {
-            var basketRepo = _unitOfWork.GetReadRepository<Basket>();
-            var basket = await basketRepo.GetAsync(
+            var basket = await _unitOfWork.GetReadRepository<Basket>().GetAsync(
                 b => b.AppUserId == request.AppUserId,
                 include: q => q.Include(b => b.BasketItems),
                 enableTracking: true);
@@ -41,15 +39,14 @@ namespace Application.Features.CQRS.Orders.Handlers
             if (basket == null || basket.BasketItems == null || !basket.BasketItems.Any())
                 return new ResponseModel<OrderDto>("Sepette ürün bulunamadı.", 400);
 
-            if (request.ShippingAddressId == null)
+            if (request.ShippingAddressId == 0)
                 return new ResponseModel<OrderDto>("Teslimat adresi boş olamaz.", 400);
 
             if (request.BillingAddressId == null)
                 return new ResponseModel<OrderDto>("Fatura adresi boş olamaz.", 400);
 
-            var addressRepo = _unitOfWork.GetReadRepository<Address>();
-            var shippingAddress = await addressRepo.GetByIdAsync(request.ShippingAddressId);
-            var billingAddress = await addressRepo.GetByIdAsync(request.BillingAddressId.Value);
+            var shippingAddress = await _unitOfWork.GetReadRepository<Address>().GetByIdAsync(request.ShippingAddressId);
+            var billingAddress = await _unitOfWork.GetReadRepository<Address>().GetByIdAsync(request.BillingAddressId.Value);
 
             if (shippingAddress == null || billingAddress == null)
                 return new ResponseModel<OrderDto>("Adres bilgileri geçersiz.", 400);
@@ -60,8 +57,7 @@ namespace Application.Features.CQRS.Orders.Handlers
             order.OrderDate = DateTime.UtcNow;
             order.OrderStatus = Domain.Entities.Enums.OrderStatus.Beklemede;
 
-
-            var orderItems = basket.BasketItems.Select(bi => new OrderItem
+            order.OrderItems = basket.BasketItems.Select(bi => new OrderItem
             {
                 ProductId = bi.ProductId,
                 ProductAttributeValueId = bi.ProductAttributeValueId,
@@ -71,21 +67,20 @@ namespace Application.Features.CQRS.Orders.Handlers
                 UpdatedDate = DateTime.UtcNow
             }).ToList();
 
-            order.OrderItems = orderItems;
-
-            var orderWriteRepo = _unitOfWork.GetWriteRepository<Order>();
-            var pavReadRepo = _unitOfWork.GetReadRepository<ProductAttributeValue>();
-            var pavWriteRepo = _unitOfWork.GetWriteRepository<ProductAttributeValue>();
-            var basketWriteRepo = _unitOfWork.GetWriteRepository<Basket>();
-
             foreach (var item in basket.BasketItems)
             {
-                var pav = await pavReadRepo.GetByIdAsync(item.ProductAttributeValueId!.Value);
+                if (!item.ProductAttributeValueId.HasValue)
+                    return new ResponseModel<OrderDto>("Ürün özellik bilgisi eksik.", 400);
+
+                var pav = await _unitOfWork.GetReadRepository<ProductAttributeValue>().GetByIdAsync(item.ProductAttributeValueId.Value);
                 if (pav == null)
                     return new ResponseModel<OrderDto>($"Ürün özelliği bulunamadı: {item.ProductAttributeValueId}", 400);
 
                 pav.Stock -= item.Quantity;
-                await pavWriteRepo.UpdateAsync(pav);
+                if (pav.Stock < 0)
+                    return new ResponseModel<OrderDto>($"Yetersiz stok: {item.ProductAttributeValueId}", 400);
+
+                await _unitOfWork.GetWriteRepository<ProductAttributeValue>().UpdateAsync(pav);
             }
 
             foreach (var item in basket.BasketItems)
@@ -94,13 +89,11 @@ namespace Application.Features.CQRS.Orders.Handlers
                     await _reservationService.ReleaseStockAsync(item.ProductAttributeValueId.Value, item.Quantity);
             }
 
-
-            await orderWriteRepo.AddAsync(order);
-
-            await basketWriteRepo.DeleteAsync(basket);
-
+            await _unitOfWork.GetWriteRepository<Order>().AddAsync(order);
+            await _unitOfWork.GetWriteRepository<Basket>().DeleteAsync(basket);
 
             var result = await _unitOfWork.SaveChangesAsync();
+
             if (result <= 0)
                 return new ResponseModel<OrderDto>("Sipariş oluşturulurken hata oluştu.", 500);
 

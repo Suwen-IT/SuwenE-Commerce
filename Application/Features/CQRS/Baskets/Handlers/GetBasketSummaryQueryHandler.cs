@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Baskets.Queries;
 using Application.Features.DTOs.Baskets;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.Baskets;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +10,20 @@ namespace Application.Features.CQRS.Baskets.Handlers
 {
     public class GetBasketSummaryQueryHandler : IRequestHandler<GetBasketSummaryQueryRequest, ResponseModel<BasketSummaryDto>>
     {
-        private readonly IReadRepository<Basket> _basketReadRepository;
-        public GetBasketSummaryQueryHandler(IReadRepository<Basket> basketReadRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public GetBasketSummaryQueryHandler(IUnitOfWork unitOfWork)
         {
-            _basketReadRepository = basketReadRepository;
+            _unitOfWork = unitOfWork;
         }
+
         public async Task<ResponseModel<BasketSummaryDto>> Handle(GetBasketSummaryQueryRequest request, CancellationToken cancellationToken)
         {
-            var basket = await _basketReadRepository.GetAsync(
-                b => b.AppUserId == request.AppUserId,
-                include: b => b.Include(x => x.BasketItems));
+            var basket = await _unitOfWork.GetReadRepository<Basket>()
+                .GetAsync(
+                    b => b.AppUserId == request.AppUserId,
+                    include: b => b.Include(x => x.BasketItems),
+                    enableTracking: false);
 
             if (basket == null || basket.BasketItems == null || !basket.BasketItems.Any())
             {

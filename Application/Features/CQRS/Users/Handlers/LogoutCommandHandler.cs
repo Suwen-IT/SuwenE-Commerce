@@ -3,11 +3,6 @@ using Application.Features.CQRS.Users.Commands;
 using Application.Interfaces;
 using Application.Interfaces.Services;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.CQRS.Users.Handlers
 {

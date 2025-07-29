@@ -9,11 +9,5 @@ namespace Application.Features.CQRS.Categories.Queries
     {
         public int Id { get; set; }
 
-        public GetCategoryByIdQueryRequest(int id)
-        {
-            Id = id;
-        }
-
-
     }
 }

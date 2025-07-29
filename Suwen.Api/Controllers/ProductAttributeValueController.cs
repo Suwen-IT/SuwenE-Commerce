@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         [HttpGet("get-by-id")]
         public async Task<IActionResult> GetById(int id)
         {
-            var response = await _mediator.Send(new GetProductAttributeValueByIdQueryRequest(id));
+            var response = await _mediator.Send(new GetProductAttributeValueByIdQueryRequest{ Id = id });
             return StatusCode(response.StatusCode, response);
         }
 
@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
         [HttpDelete(("delete/{id}"))]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _mediator.Send(new DeleteProductAttributeValueCommandRequest(id));
+            var response = await _mediator.Send(new DeleteProductAttributeValueCommandRequest{ Id = id });
             return StatusCode(response.StatusCode, response);
         }
     }

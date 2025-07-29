@@ -1,6 +1,4 @@
 ﻿using Application.Features.CQRS.ProductAttributes.Commands;
-using Application.Interfaces.Repositories;
-using Domain.Entities;
 using FluentValidation;
 
 namespace Application.Validators.ProductAttributes

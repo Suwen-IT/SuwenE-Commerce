@@ -1,28 +1,26 @@
 using Application.Common.Models;
 using Application.Features.CQRS.Products.Commands;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.Products;
 using MediatR;
 
 public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, ResponseModel<NoContent>>
 {
-    private readonly IReadRepository<Product> _readRepository;
-    private readonly IWriteRepository<Product> _writeRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteProductCommandHandler(IReadRepository<Product> readRepository, IWriteRepository<Product> writeRepository)
+    public DeleteProductCommandHandler(IUnitOfWork unitOfWork)
     {
-        _readRepository = readRepository;
-        _writeRepository = writeRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ResponseModel<NoContent>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var entity = await _readRepository.GetByIdAsync(request.Id);
+        var entity = await _unitOfWork.GetReadRepository<Product>().GetByIdAsync(request.Id);
         if (entity == null)
             return new ResponseModel<NoContent>("Silinmek istenen ürün bulunamadı.", 404);
 
-        await _writeRepository.DeleteAsync(entity);
-        var saved = await _writeRepository.SaveChangesAsync();
+        await _unitOfWork.GetWriteRepository<Product>().DeleteAsync(entity);
+        var saved = await _unitOfWork.SaveChangesBoolAsync();
 
         if (!saved)
             return new ResponseModel<NoContent>("Ürün silinirken bir hata oluştu.", 500);

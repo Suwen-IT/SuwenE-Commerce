@@ -8,36 +8,36 @@ public class RegisterCommandRequestValidator:AbstractValidator<RegisterCommandRe
     public RegisterCommandRequestValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("E-posta alanı zorunludur!")
-            .EmailAddress().WithMessage("Lütfen geçerli bir E-posta adresi giriniz. ");
+            .NotEmpty().WithMessage("E-posta alanÄ± zorunludur!")
+            .EmailAddress().WithMessage("LÃ¼tfen geÃ§erli bir E-posta adresi giriniz. ");
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Şifre alanı zorunludur!")
-            .MinimumLength(6).WithMessage("Şifre en az6 karakterden oluşmalıdır!")
-            .Matches("[A-Z]").WithMessage("Şifre en az bir büyük harf içermelidir!")
-            .Matches("[a-z]").WithMessage("Şifre en az bir küçük harf içermelidir!")
-            .Matches("[0-9]").WithMessage("Şifre en az bir rakam içermelidir!")
-            .Matches("[^a-zA-Z0-9]").WithMessage("Şifre en az bir özel karakter içermelidir!");
+            .NotEmpty().WithMessage("Åifre alanÄ± zorunludur!")
+            .MinimumLength(6).WithMessage("Åifre en az 6 karakterden oluÅŸmalÄ±dÄ±r!")
+            .Matches("[A-Z]").WithMessage("Åifre en az bir bÃ¼yÃ¼k harf iï¿½ermelidir!")
+            .Matches("[a-z]").WithMessage("Åifre en az bir kÃ¼Ã§Ã¼k harf iï¿½ermelidir!")
+            .Matches("[0-9]").WithMessage("Åifre en az bir rakam iÃ§ermelidir!")
+            .Matches("[^a-zA-Z0-9]").WithMessage("Åifre en az bir Ã¶zel karakter iÃ§ermelidir!");
         
         RuleFor(x=>x.ConfirmPassword)
-            .NotEmpty().WithMessage("Şifre onaylama alanı zorunludur!")
-            .Equal(x => x.Password).WithMessage("Girrdiğiniz şifreler uyuşmamaktadır.");
+            .NotEmpty().WithMessage("Åifre onaylama alanÄ± zorunludur!")
+            .Equal(x => x.Password).WithMessage("GirrdiÄŸiniz ÅŸifreler uyuÅŸmamaktadÄ±r.");
 
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("İsim alanı zorunludur!");
+            .NotEmpty().WithMessage("Ä°sim alanÄ± zorunludur!");
         
         RuleFor(x=>x.LastName)
-            .NotEmpty().WithMessage("Soyisim alanı zorunludur!");
+            .NotEmpty().WithMessage("Soyisim alanÄ± zorunludur!");
 
         RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("Kullanıcı adı alanı zorunludur!")
-            .Length(6, 20).WithMessage("Kullanıcı adı 6-20 karakter arasında olmalıdır.")
-            .Matches("^[a-zA-Z0-9]*$").WithMessage("Kulllanıcı adı harfler ve rakamlardan oluşmalıdır.");
+            .NotEmpty().WithMessage("KullanÄ±cÄ± adÄ± alanÄ± zorunludur!")
+            .Length(6, 20).WithMessage("KullanÄ±cÄ± adÄ± 6-20 karakter arasÄ±nda olmalÄ±dÄ±r.")
+            .Matches("^[a-zA-Z0-9]*$").WithMessage("KulllanÄ±cÄ± adÄ± harfler ve rakamlardan oluÅŸmalÄ±dÄ±r.");
         
         RuleFor(x=>x.PhoneNumber)
-            .NotEmpty().WithMessage("Telefon numarası alanı zorunludur!")
-            .Length(11).WithMessage("Telefon numarası 11 karakerden oluşmalıdır!")
-            .Matches("^[0-9]*$").WithMessage("Telefon numarası sadece rakamlardan oluşmalıdır.");
+            .NotEmpty().WithMessage("Telefon numarasÄ± alanÄ± zorunludur!")
+            .Length(11).WithMessage("Telefon numarasÄ± 11 karakerden oluÅŸmalÄ±dÄ±r!")
+            .Matches("^[0-9]*$").WithMessage("Telefon numarasÄ± sadece rakamlardan oluÅŸmalÄ±dÄ±r.");
 
     }
 }

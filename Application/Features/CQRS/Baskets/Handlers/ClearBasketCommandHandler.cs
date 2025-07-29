@@ -1,6 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Baskets.Commands;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.Baskets;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,33 +9,39 @@ namespace Application.Features.CQRS.Baskets.Handlers
 {
     public class ClearBasketCommandHandler : IRequestHandler<ClearBasketCommandRequest, ResponseModel<NoContent>>
     {
-        private readonly IReadRepository<Basket> _basketReadRepository;
-        private readonly IWriteRepository<BasketItem> _basketItemWriteRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ClearBasketCommandHandler( IReadRepository<Basket> basketReadRepository, IWriteRepository<BasketItem> basketItemWriteRepository)
+        public ClearBasketCommandHandler(IUnitOfWork unitOfWork)
         {
-            _basketReadRepository = basketReadRepository;
-            _basketItemWriteRepository = basketItemWriteRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ResponseModel<NoContent>> Handle(ClearBasketCommandRequest request, CancellationToken cancellationToken)
         {
-            var basket = await _basketReadRepository.GetAsync(
-                b => b.AppUserId == request.AppUserId,
-                include: b => b.Include(b => b.BasketItems));
+            var basket = await _unitOfWork.GetReadRepository<Basket>()
+                .GetAsync(
+                    b => b.AppUserId == request.AppUserId,
+                    include: b => b.Include(b => b.BasketItems),
+                    enableTracking: true);
 
             if (basket == null)
-                return new ResponseModel<NoContent>("Kullanıcıya ait sepet bulunamadı.",404);
+                return new ResponseModel<NoContent>("Kullanıcıya ait sepet bulunamadı.", 404);
 
-            if(basket.BasketItems== null || !basket.BasketItems.Any())
+            if (basket.BasketItems == null || !basket.BasketItems.Any())
                 return new ResponseModel<NoContent>("Sepet zaten boş.", 200);
+
+            var basketItemRepo = _unitOfWork.GetWriteRepository<BasketItem>();
 
             foreach (var item in basket.BasketItems)
             {
-                await _basketItemWriteRepository.DeleteAsync(item);
+                await basketItemRepo.DeleteAsync(item);
             }
 
-            await _basketItemWriteRepository.SaveChangesAsync();
+            var success = await _unitOfWork.SaveChangesBoolAsync();
+
+            if (!success)
+                return new ResponseModel<NoContent>("Sepet temizlenirken hata oluştu.", 500);
+
             return new ResponseModel<NoContent>(new NoContent(), 204);
         }
     }

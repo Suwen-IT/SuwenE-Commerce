@@ -29,7 +29,7 @@ public class GetUserByIdQueryHandler:IRequestHandler<GetUserByIdQueryRequest,Res
             return new ResponseModel<UserDto>
             {
                 Success = false,
-                Messages = new[] { "Kullanýcý bulunamadý!" },
+                Messages = new[] { "KullanÄ±cÄ± bulunamadÄ±!" },
                 StatusCode = 400
             };
         }
@@ -43,7 +43,7 @@ public class GetUserByIdQueryHandler:IRequestHandler<GetUserByIdQueryRequest,Res
         {
             Data = userDto,
             Success = true,
-            Messages = new[] { "Kullanýcý kimliði baþarýyla eþleþtirildi." },
+            Messages = new[] { "KullanÄ±cÄ± kimliÄŸi baÅŸarÄ±yla eÅŸleÅŸtirildi." },
             StatusCode = 200
         };
     }

@@ -32,14 +32,14 @@ namespace Suwen.Api.Controllers
         [HttpGet("getbyid/{id}")]
         public async Task<IActionResult> GetProductAttributeById(int id)
         {
-            var response = await _mediator.Send(new GetProductAttributeByIdQueryRequest(id));
+            var response = await _mediator.Send(new GetProductAttributeByIdQueryRequest{ Id = id });
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteProductAttribute(int id)
         {
-            var response = await _mediator.Send(new DeleteProductAttributeCommandRequest(id));
+            var response = await _mediator.Send(new DeleteProductAttributeCommandRequest { Id = id});
             return StatusCode(response.StatusCode, response);
         }
 

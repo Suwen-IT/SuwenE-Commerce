@@ -10,6 +10,7 @@ using Suwen.Infrastructure.Abstracts;
 using Suwen.Infrastructure.Concretes;
 using Suwen.Infrastructure.Services;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure;
 
@@ -56,6 +57,29 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IReservationService, ReservationService>();
         services.AddHostedService<ExpiredReservationCleanupService>();
+
+        services.AddScoped<IEmailSender>(provider =>
+        {
+            var config = configuration.GetSection("EmailSettings");
+            var logger = provider.GetRequiredService<ILogger<EmailSender>>();
+            
+            var portString = config["SmtpServerPort"];
+            int port;
+            if (!int.TryParse(portString, out port))
+            {
+                port = 587;
+            }
+            
+            return new EmailSender(
+                config["SmtpServer"],
+                port,
+                config["SenderName"],
+                config["UserName"],
+                config["Password"],
+                logger);
+        });
+        services.AddScoped<ITemplateService, TemplateService>();
+        services.AddScoped<INotificationService, NotificationService>();
 
 
         return services;

@@ -1,25 +1,25 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.ProductAttributeValues.Queries;
 using Application.Features.DTOs.Products;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using AutoMapper;
 using Domain.Entities.Products;
 using MediatR;
 
 public class GetProductAttributeValueByIdQueryHandler : IRequestHandler<GetProductAttributeValueByIdQueryRequest, ResponseModel<ProductAttributeValueDto>>
 {
-    private readonly IReadRepository<ProductAttributeValue> _readRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetProductAttributeValueByIdQueryHandler(IReadRepository<ProductAttributeValue> readRepository, IMapper mapper)
+    public GetProductAttributeValueByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _readRepository = readRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<ResponseModel<ProductAttributeValueDto>> Handle(GetProductAttributeValueByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var entity = await _readRepository.GetByIdAsync(request.Id);
+        var entity = await _unitOfWork.GetReadRepository<ProductAttributeValue>().GetByIdAsync(request.Id);
 
         if (entity == null)
             return new ResponseModel<ProductAttributeValueDto>("Ürün niteliği değeri bulunamadı.", 404);

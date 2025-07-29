@@ -1,37 +1,37 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Reviews.Commands;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using Domain.Entities;
 using MediatR;
+
 
 namespace Application.Features.CQRS.Reviews.Handlers
 {
     public class DeleteReviewCommandHandler : IRequestHandler<DeleteReviewCommandRequest, ResponseModel<NoContent>>
     {
-        private readonly IReadRepository<Review> _readRepository;
-        private readonly IWriteRepository<Review> _writeRepository;
-        public DeleteReviewCommandHandler(IReadRepository<Review> readRepository, IWriteRepository<Review> writeRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public DeleteReviewCommandHandler(IUnitOfWork unitOfWork)
         {
-            _readRepository = readRepository;
-            _writeRepository = writeRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ResponseModel<NoContent>> Handle(DeleteReviewCommandRequest request, CancellationToken cancellationToken)
         {
-            var review = await _readRepository.GetByIdAsync(request.Id);
-            if(review==null)
-                return new ResponseModel<NoContent>("Yorum bulunamadı.",404);
+            var review = await _unitOfWork.GetReadRepository<Review>().GetByIdAsync(request.Id);
+            if (review == null)
+                return new ResponseModel<NoContent>("Yorum bulunamadı.", 404);
 
-            if(review.AppUserId != request.AppUserId)
+            if (review.AppUserId != request.AppUserId)
                 return new ResponseModel<NoContent>("Bu yorumu silme yetkiniz yok.", 403);
 
-            await _writeRepository.DeleteAsync(review);
-            var result = await _writeRepository.SaveChangesAsync();
+            await _unitOfWork.GetWriteRepository<Review>().DeleteAsync(review);
+            var result = await _unitOfWork.SaveChangesBoolAsync();
 
-            if(!result)
+            if (!result)
                 return new ResponseModel<NoContent>("Yorum silinemedi.", 500);
 
-            return new ResponseModel<NoContent>( new NoContent(),204);
+            return new ResponseModel<NoContent>(new NoContent(), 204);
         }
     }
 }

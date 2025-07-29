@@ -8,10 +8,7 @@ namespace Application.Features.CQRS.Categories.Commands
     public class DeleteCategoryCommandRequest:IRequest<ResponseModel<NoContent>>
     {
         public int Id { get; set; }
-        public DeleteCategoryCommandRequest(int id)
-        {
-            Id = id;
-        }
+        
 
     }
 }

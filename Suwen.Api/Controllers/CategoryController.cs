@@ -35,7 +35,7 @@ namespace Suwen.Api.Controllers
         [HttpGet("getbyid/{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
-            var response = await _mediator.Send(new GetCategoryByIdQueryRequest(id));
+            var response = await _mediator.Send(new GetCategoryByIdQueryRequest{ Id = id });
             return StatusCode(response.StatusCode, response);
         }
 
@@ -43,7 +43,7 @@ namespace Suwen.Api.Controllers
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var response = await _mediator.Send(new DeleteCategoryCommandRequest(id));
+            var response = await _mediator.Send(new DeleteCategoryCommandRequest{Id = id});
             return StatusCode(response.StatusCode, response);
         }
 

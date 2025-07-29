@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Reviews.Queries;
 using Application.Features.DTOs.Reviews;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using Domain.Entities;
 using MediatR;
 
@@ -9,18 +9,18 @@ namespace Application.Features.CQRS.Reviews.Handlers
 {
     public class GetProductReviewSummaryQueryHandler : IRequestHandler<GetProductReviewSummaryQueryRequest, ResponseModel<ProductReviewSummaryDto>>
     {
-        private readonly IReadRepository<Review> _readRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetProductReviewSummaryQueryHandler(IReadRepository<Review> readRepository)
+        public GetProductReviewSummaryQueryHandler(IUnitOfWork unitOfWork)
         {
-            _readRepository = readRepository;
+            _unitOfWork = unitOfWork;
         }
+
         public async Task<ResponseModel<ProductReviewSummaryDto>> Handle(GetProductReviewSummaryQueryRequest request, CancellationToken cancellationToken)
         {
-            var reviews = await _readRepository.GetAllAsync(
+            var reviews = await _unitOfWork.GetReadRepository<Review>().GetAllAsync(
                 predicate: r => r.ProductId == request.ProductId,
-                enableTracking: false
-            );
+                enableTracking: false);
 
             if (reviews == null || !reviews.Any())
             {

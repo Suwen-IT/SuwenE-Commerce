@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Baskets.Commands;
-using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.Baskets;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,24 +10,24 @@ namespace Application.Features.CQRS.Baskets.Handlers
 {
     public class DeleteBasketItemCommandHandler : IRequestHandler<DeleteBasketItemCommandRequest, ResponseModel<NoContent>>
     {
-        private readonly IReadRepository<BasketItem> _basketItemReadRepository;
-        private readonly IWriteRepository<BasketItem> _basketItemWriteRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IReservationService _reservationService;
 
-        public DeleteBasketItemCommandHandler(IReadRepository<BasketItem> basketItemReadRepository, IWriteRepository<BasketItem> basketItemWriteRepository,
-            IReservationService reservationService)
+        public DeleteBasketItemCommandHandler(IUnitOfWork unitOfWork, IReservationService reservationService)
         {
-            _basketItemReadRepository = basketItemReadRepository;
-            _basketItemWriteRepository = basketItemWriteRepository;
+            _unitOfWork = unitOfWork;
             _reservationService = reservationService;
         }
+
         public async Task<ResponseModel<NoContent>> Handle(DeleteBasketItemCommandRequest request, CancellationToken cancellationToken)
         {
-            var basketItem = await _basketItemReadRepository.GetAsync(
-                bi => bi.Id == request.BasketItemId,
-                include: q => q.Include(bi => bi.Basket));
+            var basketItem = await _unitOfWork.GetReadRepository<BasketItem>()
+                .GetAsync(
+                    bi => bi.Id == request.BasketItemId,
+                    include: q => q.Include(bi => bi.Basket),
+                    enableTracking: true);
 
-            if(basketItem == null||basketItem.Basket==null)
+            if (basketItem == null || basketItem.Basket == null)
                 return new ResponseModel<NoContent>("Sepet öğesi bulunamadı.", 404);
 
             if (basketItem.Basket.AppUserId != request.AppUserId)
@@ -37,15 +37,17 @@ namespace Application.Features.CQRS.Baskets.Handlers
             {
                 await _reservationService.ReleaseStockAsync(
                     basketItem.ProductAttributeValueId.Value,
-                    basketItem.Quantity
-                );
+                    basketItem.Quantity);
             }
 
-            await _basketItemWriteRepository.DeleteAsync(basketItem);
-            await _basketItemWriteRepository.SaveChangesAsync();
+            await _unitOfWork.GetWriteRepository<BasketItem>().DeleteAsync(basketItem);
+
+            var success = await _unitOfWork.SaveChangesBoolAsync();
+
+            if (!success)
+                return new ResponseModel<NoContent>("Sepet öğesi silinirken hata oluştu.", 500);
 
             return new ResponseModel<NoContent>(new NoContent(), 204);
         }
     }
-    
 }

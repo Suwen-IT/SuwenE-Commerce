@@ -1,29 +1,28 @@
 ﻿using Application.Common.Models;
 using Application.Features.CQRS.Reviews.Commands;
 using Application.Features.DTOs.Reviews;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWorks;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+
 
 namespace Application.Features.CQRS.Reviews.Handlers
 {
     public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommandRequest, ResponseModel<ReviewDto>>
     {
-        private IReadRepository<Review> _readRepository;
-        private IWriteRepository<Review> _writeRepository;
-        private IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UpdateReviewCommandHandler(IReadRepository<Review> readRepository, IWriteRepository<Review> writeRepository, IMapper mapper)
+        public UpdateReviewCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _readRepository = readRepository;
-            _writeRepository = writeRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<ResponseModel<ReviewDto>> Handle(UpdateReviewCommandRequest request, CancellationToken cancellationToken)
         {
-          var existingReview= await _readRepository.GetByIdAsync(request.Id);
+            var existingReview = await _unitOfWork.GetReadRepository<Review>().GetByIdAsync(request.Id);
             if (existingReview == null)
                 return new ResponseModel<ReviewDto>("Güncellenecek yorum bulunamadı.", 404);
 
@@ -34,9 +33,10 @@ namespace Application.Features.CQRS.Reviews.Handlers
             existingReview.Comment = request.Comment;
             existingReview.UpdatedDate = DateTime.UtcNow;
 
-            await _writeRepository.UpdateAsync(existingReview);
-            var saved=await _writeRepository.SaveChangesAsync();
-            if(!saved)
+            await _unitOfWork.GetWriteRepository<Review>().UpdateAsync(existingReview);
+            var saved = await _unitOfWork.SaveChangesBoolAsync();
+
+            if (!saved)
                 return new ResponseModel<ReviewDto>("Yorum güncellenmedi.", 500);
 
             var reviewDto = _mapper.Map<ReviewDto>(existingReview);
